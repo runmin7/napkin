@@ -1,0 +1,69 @@
+/* 단축키를 받아내는 작은 창. 목록 패널과 설정 창이 같은 화면을 띄운다. */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 24, 28, 0.45);
+}
+
+.capture {
+  width: 300px;
+  padding: 18px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.capture h3 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.capture .target {
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  margin: 0 0 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.capture .keys {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--line);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.capture .keys.waiting {
+  color: var(--ink-faint);
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.capture .error {
+  min-height: 16px;
+  font-size: 11.5px;
+  color: var(--danger);
+  margin: 0 0 12px;
+}
+
+.capture .actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+

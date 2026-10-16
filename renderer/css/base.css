@@ -1,0 +1,68 @@
+/* 색과 글꼴의 바탕. 창들이 모두 맨 먼저 읽는다.
+   여기 있는 변수만 바꾸면 앱 전체의 색이 따라온다. 다크 모드도 이 안에서 갈린다. */
+
+:root {
+  --paper: #fcfbf8;
+  --ink: #1d2126;
+  --ink-soft: #5d6673;
+  --ink-faint: #9aa2ad;
+  --line: #e5e2da;
+  --line-soft: #efece5;
+  --accent: #12857c;
+  --accent-soft: #e2f0ee;
+  --hover: #f2efe8;
+  --select: #e6efee;
+  --danger: #b03a2e;
+  /* 마크다운 문법 기호(# ** ` > - | ~~). 본문 글자와 뚜렷이 갈라져야
+     이 메모가 마크다운으로 쓰였다는 것이 한눈에 보인다.
+     청록 계열은 코드·링크·목록이 이미 쓰고 있어 피했다. */
+  --syntax: #b5527f;
+  /* 찾기(Ctrl+F)로 걸린 낱말. 본문 선택색과 헷갈리지 않게 계열이 다른 색을 쓴다.
+     밝은 주황이라 어두운 화면에서도 그대로 읽히므로 다크 모드에서도 같은 값을 쓴다. */
+  --match: #ff9632;
+  --match-ink: #1d2126;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1b1f24;
+    --ink: #e6eaf0;
+    --ink-soft: #a8b2be;
+    --ink-faint: #6d7783;
+    --line: #2c333b;
+    --line-soft: #262c33;
+    --accent: #45c0b2;
+    --accent-soft: #17332f;
+    --hover: #232a31;
+    --select: #1e3b37;
+    --danger: #e0796b;
+    /* 어두운 화면에서는 같은 자홍이 가라앉는다. 한 단계 밝은 쪽으로 옮긴다. */
+    --syntax: #e289ac;
+    --match: #ff9632;
+    --match-ink: #1d2126;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* display를 따로 지정한 요소에서도 hidden 속성이 확실히 먹도록 못박는다.
+   설정 창의 #message처럼 display:flex를 준 곳은 이것이 없으면 hidden이 무시된다. */
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Malgun Gothic', 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+}

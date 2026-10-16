@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
+    />
+    <title>빠른 메모</title>
+    <!-- 순서가 중요하다. editor.css의 .side-list 규칙은 list.css의 .row 규칙보다
+         먼저 읽혀야 지금과 같은 모습이 된다(css/editor.css 머리말 참고). -->
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/editor.css" />
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/list.css" />
+    <link rel="stylesheet" href="css/capture.css" />
+    <!-- 렌더링한 메모의 생김새. 규칙이 전부 .md-body 안으로 스코프돼 있어 순서와 무관하다. -->
+    <link rel="stylesheet" href="css/preview.css" />
+  </head>
+  <body>
+    <div class="editor-shell">
+      <div class="workspace">
+        <div id="editor"></div>
+
+        <!-- 편집기와 같은 자리를 차지하고 번갈아 보인다. 조회 전용 메모를 열거나
+             미리보기 버튼을 누르면 이쪽이 나온다. 안쪽 .md-body는 글 폭을 좁혀 가운데 놓는다. -->
+        <div id="reader" tabindex="-1" hidden>
+          <article id="md" class="md-body"></article>
+        </div>
+
+        <aside id="side-list" class="side-list">
+          <div class="side-head">
+            <input id="search" type="search" placeholder="제목과 내용에서 찾기" autocomplete="off" />
+          </div>
+          <div id="body" class="side-body"></div>
+          <p class="side-foot">클릭 열기 · Delete 삭제 · 우클릭 단축키</p>
+        </aside>
+      </div>
+
+      <div class="statusbar">
+        <button type="button" id="new-note" class="icon-btn" title="새 메모 (Ctrl+N)">
+          <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 3.2v9.6M3.2 8h9.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+        <button type="button" id="pin" class="icon-btn" title="항상 위에 고정">
+          <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true">
+            <path
+              d="M5.8 2h4.4M6.4 2v4.3L4.2 8.9v1.2h7.6V8.9L9.6 6.3V2M8 10.1V14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <button type="button" id="open-folder" class="icon-btn" title="메모가 저장된 폴더 열기">
+          <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true">
+            <path
+              d="M1.6 12.6v-9a.9.9 0 0 1 .9-.9h3.3l1.4 1.7h6.3a.9.9 0 0 1 .9.9v7.3a.9.9 0 0 1-.9.9H2.5a.9.9 0 0 1-.9-.9z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <button type="button" id="preview" class="icon-btn" title="view">
+          <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true">
+            <path
+              d="M4 2.2h5.2L13 6v7.8a.8.8 0 0 1-.8.8H4a.8.8 0 0 1-.8-.8V3a.8.8 0 0 1 .8-.8z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+              stroke-linejoin="round"
+            />
+            <path d="M9 2.4V6h3.6" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <path
+              d="M5.6 9.2h4.8M5.6 11.4h3.2"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+        <button type="button" id="star" class="icon-btn star" title="즐겨찾기">☆</button>
+        <span id="shortcut" class="badge" hidden></span>
+        <span id="view-only" class="badge" hidden>조회 전용</span>
+        <span class="spacer"></span>
+        <span id="count" class="count"></span>
+        <span id="saved"></span>
+      </div>
+    </div>
+    <script src="bundle/editor.js"></script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+/* 단축키 설정 창. */
+
+.field {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.field-label {
+  font-size: 12.5px;
+  margin-bottom: 6px;
+}
+
+.keyslot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.keyslot .value {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.keyslot .change {
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.keyslot:hover .change {
+  color: var(--ink-soft);
+}
+
+.note-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.note-shortcut .name {
+  flex: 1;
+  min-width: 0;
+  font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.note-shortcut .key {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.message {
+  padding: 8px 14px;
+  font-size: 12px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.message.error {
+  color: var(--danger);
+}
+
+.message.ok {
+  color: var(--accent);
+}
+

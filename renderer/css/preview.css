@@ -1,0 +1,132 @@
+/* 렌더링한 메모의 생김새. 편집 창 안의 #reader가 이 모습으로 메모를 보여 준다.
+   규칙이 전부 .md-body 안으로 스코프돼 있어 편집 창의 다른 스타일과 부딪히지 않는다.
+   스크롤은 바깥의 #reader가 맡는다(css/editor.css). */
+
+.md-body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 36px 72px;
+  font-size: 14.5px;
+  line-height: 1.8;
+  word-break: keep-all;
+}
+
+.md-body > *:first-child {
+  margin-top: 0;
+}
+
+.md-body h1,
+.md-body h2,
+.md-body h3,
+.md-body h4,
+.md-body h5,
+.md-body h6 {
+  margin: 1.8em 0 0.6em;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.md-body h1 {
+  font-size: 1.7em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--line);
+}
+.md-body h2 {
+  font-size: 1.38em;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--line-soft);
+}
+.md-body h3 { font-size: 1.16em; }
+.md-body h4 { font-size: 1.02em; }
+.md-body h5,
+.md-body h6 { font-size: 0.95em; color: var(--ink-soft); }
+
+.md-body p { margin: 0 0 1em; }
+
+.md-body ul,
+.md-body ol {
+  margin: 0 0 1em;
+  padding-left: 1.5em;
+}
+.md-body li { margin-bottom: 0.3em; }
+.md-body li::marker { color: var(--accent); }
+
+/* 체크목록. 마커를 없애고 네모를 그대로 보여 준다. */
+.md-body li:has(input[type='checkbox']) { list-style: none; margin-left: -1.3em; }
+.md-body input[type='checkbox'] { margin-right: 0.4em; accent-color: var(--accent); }
+
+.md-body blockquote {
+  margin: 0 0 1em;
+  padding: 0.1em 0 0.1em 1em;
+  border-left: 3px solid var(--line);
+  color: var(--ink-soft);
+}
+
+.md-body code {
+  font-family: 'D2Coding', Consolas, monospace;
+  font-size: 0.9em;
+  padding: 0.12em 0.34em;
+  border-radius: 3px;
+  background: var(--hover);
+  color: var(--accent);
+}
+
+.md-body pre {
+  margin: 0 0 1em;
+  padding: 12px 14px;
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  background: var(--hover);
+  overflow-x: auto;
+}
+
+.md-body pre code {
+  padding: 0;
+  background: none;
+  color: var(--ink);
+}
+
+/* 편집 화면에서는 파이프가 섞인 글자로만 보이던 표. 여기서는 격자로 그려진다. */
+.md-body table {
+  width: 100%;
+  margin: 0 0 1.2em;
+  border-collapse: collapse;
+  font-size: 0.94em;
+}
+
+.md-body th,
+.md-body td {
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.md-body thead th {
+  background: var(--hover);
+  font-weight: 700;
+}
+
+/* 빈 칸도 줄이 보여야 표의 모양이 무너지지 않는다. */
+.md-body td:empty::after {
+  content: '';
+  display: inline-block;
+}
+
+.md-body a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.md-body hr {
+  margin: 1.8em 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.md-body img {
+  max-width: 100%;
+  height: auto;
+}
+
+.md-body del { color: var(--ink-faint); }

@@ -1,0 +1,500 @@
+<title>빠른 메모 사용법</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#fcfbf8;
+  --card:#ffffff;
+  --sunk:#f4f1e9;
+  --ink:#1d2126;
+  --ink-2:#4b5560;
+  --muted:#7b8492;
+  --line:#e5e2da;
+  --line-2:#d3cec2;
+  --accent:#12857c;
+  --accent-soft:#e2f0ee;
+  --accent-line:#9ccbc6;
+  --warn:#8a5610;
+  --warn-soft:#f8f0df;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1b1f24;
+    --card:#232930;
+    --sunk:#191e23;
+    --ink:#e6eaf0;
+    --ink-2:#b6c0cb;
+    --muted:#8b95a2;
+    --line:#2c333b;
+    --line-2:#3b444f;
+    --accent:#45c0b2;
+    --accent-soft:#17332f;
+    --accent-line:#2e6a63;
+    --warn:#d6a144;
+    --warn-soft:#2c2416;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1b1f24;
+  --card:#232930;
+  --sunk:#191e23;
+  --ink:#e6eaf0;
+  --ink-2:#b6c0cb;
+  --muted:#8b95a2;
+  --line:#2c333b;
+  --line-2:#3b444f;
+  --accent:#45c0b2;
+  --accent-soft:#17332f;
+  --accent-line:#2e6a63;
+  --warn:#d6a144;
+  --warn-soft:#2c2416;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans KR","Malgun Gothic",system-ui,sans-serif;
+  font-size:15.5px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+  word-break:keep-all;
+}
+.wrap{max-width:780px;margin:0 auto;padding:52px 26px 90px}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0 0 14px;max-width:64ch}
+p:last-child{margin-bottom:0}
+
+.masthead{display:flex;gap:18px;align-items:flex-start;padding-bottom:24px;border-bottom:2px solid var(--ink)}
+.mark{
+  flex:none;width:52px;height:52px;border-radius:10px;
+  background:var(--accent);display:flex;flex-direction:column;
+  justify-content:center;gap:5px;padding:0 11px;margin-top:4px;
+}
+.mark span{display:block;height:3px;border-radius:2px;background:rgba(255,255,255,.92)}
+.mark span:last-child{width:55%}
+h1{font-size:34px;font-weight:600;letter-spacing:-.02em;line-height:1.2;margin-bottom:8px}
+.lede{font-size:16px;color:var(--ink-2);font-weight:300;margin:0}
+
+section{margin-top:46px}
+.sec-label{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  display:block;margin-bottom:8px;
+}
+h2{font-size:23px;font-weight:600;letter-spacing:-.015em;margin-bottom:16px}
+h3{font-size:16px;font-weight:600;margin:26px 0 8px}
+
+.steps{list-style:none;counter-reset:s;padding:0;margin:0;display:flex;flex-direction:column;gap:14px}
+.steps li{counter-increment:s;position:relative;padding-left:40px}
+.steps li::before{
+  content:counter(s);position:absolute;left:0;top:1px;
+  width:26px;height:26px;border-radius:50%;
+  background:var(--accent);color:#fff;
+  font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+}
+.steps b{display:block;font-weight:600;margin-bottom:2px}
+.steps p{margin:0;font-size:14.5px;color:var(--ink-2)}
+
+kbd{
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:500;
+  background:var(--card);color:var(--ink);
+  border:1px solid var(--line-2);border-bottom-width:2px;
+  border-radius:4px;padding:2px 7px;white-space:nowrap;
+}
+.keymap{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line)}
+.keymap div{display:flex;align-items:center;gap:14px;background:var(--card);padding:11px 16px}
+.keymap .what{flex:1;font-size:14.5px}
+.keymap .keys{flex:none;min-width:160px;text-align:right}
+.keymap .scope{
+  flex:none;width:76px;text-align:right;
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);
+}
+
+.card{background:var(--card);border:1px solid var(--line);padding:18px 20px;margin-top:14px}
+.card h3{margin-top:0}
+.card ul{margin:0 0 10px;padding-left:20px}
+.card li{margin-bottom:3px}
+
+.callout{background:var(--accent-soft);border-left:4px solid var(--accent);padding:16px 20px;margin-top:16px}
+.callout.warn{background:var(--warn-soft);border-left-color:var(--warn)}
+.callout p{max-width:none}
+.callout .h{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);font-weight:600;
+  display:block;margin-bottom:6px;
+}
+.callout.warn .h{color:var(--warn)}
+
+code{font-family:"IBM Plex Mono",monospace;font-size:.88em;background:var(--sunk);padding:2px 6px;border-radius:3px}
+pre{
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.7;
+  background:var(--sunk);border:1px solid var(--line);
+  padding:14px 16px;margin:12px 0 0;overflow-x:auto;color:var(--ink-2);
+}
+
+table{border-collapse:collapse;width:100%;font-size:14px;margin-top:14px}
+th,td{text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  background:var(--sunk);border-bottom:1px solid var(--line-2);
+}
+tr:last-child td{border-bottom:none}
+.tw{overflow-x:auto;border:1px solid var(--line);background:var(--card)}
+.tw table{margin-top:0}
+
+.qa{display:flex;flex-direction:column;gap:2px}
+.qa details{background:var(--card);border:1px solid var(--line)}
+.qa summary{
+  padding:12px 16px;cursor:pointer;font-size:14.5px;font-weight:500;
+  list-style:none;display:flex;align-items:center;gap:10px;
+}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{
+  content:'?';flex:none;width:19px;height:19px;border-radius:50%;
+  background:var(--accent-soft);color:var(--accent);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+}
+.qa summary:hover{background:var(--sunk)}
+.qa .body{padding:0 16px 14px 45px;font-size:14px;color:var(--ink-2)}
+.qa .body p{max-width:none;margin-bottom:10px;font-size:14px}
+
+footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--line-2)}
+footer p{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);max-width:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:600px){
+  .wrap{padding:34px 18px 68px}
+  h1{font-size:27px}
+  h2{font-size:20px}
+  .keymap div{flex-wrap:wrap;gap:8px}
+  .keymap .keys{text-align:left;min-width:0}
+  .keymap .scope{width:auto;text-align:left}
+}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <div class="mark" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div>
+    <h1>빠른 메모 사용법</h1>
+    <p class="lede">저장 버튼이 없습니다. 적기만 하면 알아서 저장됩니다.</p>
+  </div>
+</header>
+
+<section>
+  <span class="sec-label">시작하기</span>
+  <h2>켜는 법</h2>
+  <ol class="steps">
+    <li>
+      <b>바탕화면의 <code>빠른메모.exe</code> 를 더블클릭합니다</b>
+      <p>처음 켤 때는 10초쯤 걸립니다. 두 번째부터는 빠릅니다.</p>
+    </li>
+    <li>
+      <b>작업표시줄 오른쪽 아래에 아이콘이 생깁니다</b>
+      <p>시계 옆 <kbd>^</kbd> 화살표를 누르면 청록색 메모지 아이콘이 있습니다. 이 아이콘을 시계 옆으로 끌어다 놓으면 계속 보이게 고정됩니다.</p>
+    </li>
+    <li>
+      <b>창을 닫아도 꺼지지 않습니다</b>
+      <p>창은 숨겨질 뿐이고 아이콘은 그대로 남습니다. 다시 부르려면 아이콘을 클릭하거나 <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>M</kbd> 을 누르세요.</p>
+    </li>
+    <li>
+      <b>막히면 이 설명서를 다시 열 수 있습니다</b>
+      <p>트레이 아이콘 <b>우클릭 → 사용법</b>. <kbd>Esc</kbd> 로 닫습니다.</p>
+    </li>
+  </ol>
+
+  <div class="callout">
+    <span class="h">한 번만 켜 두세요</span>
+    <p>두 번 실행해도 창이 두 개 뜨지 않습니다. 이미 떠 있는 창이 앞으로 올라올 뿐입니다.</p>
+  </div>
+</section>
+
+<section>
+  <span class="sec-label">화면</span>
+  <h2>창은 이렇게 생겼습니다</h2>
+
+  <pre>┌────────────────────────────┬──────────────┐
+│                            │  찾기        │
+│   글 쓰는 곳               ├──────────────┤
+│                            │  즐겨찾기    │
+│                            │  ─────────   │
+│                            │  전체 목록   │
+│                            │              │
+├────────────────────────────┴──────────────┤
+│  +   ⇧   🗀   🗎   ☆    저장됨 오후 3:12  │
+└───────────────────────────────────────────┘</pre>
+
+  <p style="margin-top:14px">왼쪽이 글 쓰는 곳, 오른쪽이 메모 목록입니다. 목록은 늘 그 자리에 붙어 있습니다.</p>
+
+  <h3>아래쪽 작은 버튼들</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>버튼</th><th>하는 일</th></tr></thead>
+      <tbody>
+        <tr><td><b>+</b></td><td>새 메모를 만듭니다</td></tr>
+        <tr><td><b>⇧</b> 압정 모양</td><td>창을 항상 다른 창 위에 띄워 둡니다</td></tr>
+        <tr><td><b>🗀</b> 폴더 모양</td><td>메모가 저장된 폴더를 엽니다. 지금 보고 있는 메모가 선택된 채로 열립니다</td></tr>
+        <tr><td><b>🗎</b> 문서 모양</td><td>꾸민 대로 보여 줍니다. 한 번 더 누르면 편집으로 돌아옵니다</td></tr>
+        <tr><td><b>☆</b> 별 모양</td><td>지금 보고 있는 메모를 즐겨찾기에 넣습니다. 목록 맨 위로 올라갑니다</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:14px">오른쪽 끝에는 마지막으로 저장된 시각이 흐리게 표시됩니다. 창 위쪽 제목에는 <b>메모의 첫 줄</b>이 그대로 나타나서, 작업표시줄만 봐도 어떤 메모인지 알 수 있습니다.</p>
+</section>
+
+<section>
+  <span class="sec-label">기본</span>
+  <h2>쓰는 법</h2>
+  <p>창에 그냥 적으면 됩니다. 저장 버튼도, 파일 이름을 묻는 창도 없습니다.</p>
+
+  <div class="card">
+    <h3>이럴 때 저장됩니다</h3>
+    <ul>
+      <li>다른 프로그램으로 넘어갈 때 (브라우저, 폴더, 엑셀 등)</li>
+      <li>타이핑을 잠깐 멈췄을 때</li>
+      <li>창을 닫거나 숨길 때</li>
+      <li>프로그램을 종료할 때</li>
+      <li>다른 메모로 넘어가기 직전</li>
+    </ul>
+    <p>저장되면 창 아래쪽에 저장된 시각이 표시됩니다.</p>
+  </div>
+
+  <div class="callout">
+    <span class="h">첫 줄이 곧 제목입니다</span>
+    <p>따로 제목을 입력하는 칸이 없습니다. 첫 줄에 쓴 내용이 <b>창 제목</b>과 <b>작업표시줄</b>, <b>메모 목록</b>에 그대로 나타납니다. 타이핑하는 대로 바로 바뀝니다.</p>
+  </div>
+
+  <p style="margin-top:16px">새 메모를 열어 놓고 아무것도 안 쓰면 파일이 만들어지지 않습니다. 빈 메모가 쌓여 목록이 지저분해지는 일은 없습니다. 메모를 열면 커서는 항상 <b>첫 줄 맨 앞</b>에 놓입니다.</p>
+</section>
+
+<section>
+  <span class="sec-label">서식</span>
+  <h2>마크다운으로 꾸미기</h2>
+  <p>글자를 굵게 하거나 제목을 만들고 싶으면 기호를 함께 적습니다. <b>치는 즉시 화면에 반영됩니다.</b></p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>이렇게 적으면</th><th>이렇게 보입니다</th></tr></thead>
+      <tbody>
+        <tr><td><code>**굵게**</code></td><td><b>굵게</b></td></tr>
+        <tr><td><code>*기울임*</code></td><td><i>기울임</i></td></tr>
+        <tr><td><code># 큰 제목</code></td><td>크고 굵은 제목 (<code>#</code> 개수로 6단계까지)</td></tr>
+        <tr><td><code>- 목록</code></td><td>기호가 청록색으로</td></tr>
+        <tr><td><code>1. 번호목록</code></td><td>번호가 청록색으로</td></tr>
+        <tr><td><code>&gt; 인용</code></td><td>흐린 기울임꼴</td></tr>
+        <tr><td><code>`코드`</code></td><td>고정폭 글꼴 + 청록색</td></tr>
+        <tr><td><code>[링크](주소)</code></td><td>밑줄 친 청록색</td></tr>
+        <tr><td><code>---</code></td><td>구분선</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <span class="h">굵게는 단축키로도 됩니다</span>
+    <p>굵게 할 글자를 드래그해서 고른 뒤 <kbd>Ctrl</kbd> + <kbd>B</kbd> 를 누르면 좌우에 <code>**</code> 가 붙습니다. 이미 굵은 글자에서 한 번 더 누르면 <code>**</code> 가 떨어집니다. 고른 글자 없이 누르면 <code>****</code> 가 놓이고 그 사이에 커서가 갑니다.</p>
+  </div>
+
+  <div class="callout">
+    <span class="h">취소하려면 기호를 지우세요</span>
+    <p><code>**</code> 같은 기호는 <b>흐린 회색으로 계속 보입니다.</b> 지워야 할 때 찾을 수 있어야 하기 때문입니다. 기호를 지우면 서식도 함께 풀립니다. <kbd>Ctrl</kbd> + <kbd>Z</kbd> 로 되돌려도 됩니다.</p>
+  </div>
+
+  <p style="margin-top:16px">파일에는 <b>적은 그대로</b> 저장됩니다. 꾸민 메모를 윈도우 메모장으로 열어도 내용이 온전히 남아 있습니다.</p>
+</section>
+
+<section>
+  <span class="sec-label">읽기</span>
+  <h2>꾸민 대로 보기</h2>
+  <p>글 쓰는 화면은 <code>**</code>, <code>##</code> 같은 기호를 글자 그대로 둡니다. 지워야 할 때 보여야 하기 때문입니다. 다 쓰고 나서 <b>꾸민 결과</b>를 보고 싶으면 아래쪽 <b>문서 모양 버튼</b>을 누르세요. 같은 자리에서 제목이 제 크기로, 표가 격자로 바뀝니다. <b>한 번 더 누르면 편집으로 돌아옵니다.</b></p>
+
+  <div class="callout">
+    <span class="h">읽기만 하는 메모는 표시해 두세요</span>
+    <p>업무 정리처럼 <b>다 쓰고 나면 고칠 일 없이 읽기만 하는 메모</b>가 있습니다. 목록에서 그 메모를 <b>우클릭 → 열 때 조회 전용으로</b> 를 고르면, 다음부터 그 메모를 열 때마다 꾸민 모습으로 바로 나옵니다. 매번 버튼을 누르지 않아도 됩니다.</p>
+    <p>목록의 그 줄에는 <b>조회</b> 표시가 붙고, 메모를 열면 아래쪽에 <b>조회 전용</b> 이라고 보입니다.</p>
+    <p><b>잠그는 것이 아닙니다.</b> 고쳐야 할 때는 문서 모양 버튼을 한 번 누르면 바로 편집할 수 있습니다. 다른 메모로 갔다 돌아오면 다시 읽기 모습으로 열립니다. 아예 되돌리려면 목록에서 우클릭 → <b>조회 전용 해제</b>.</p>
+  </div>
+
+  <div class="callout">
+    <span class="h">읽는 중에는 찾기가 안 됩니다</span>
+    <p>꾸민 모습을 보는 동안에는 <kbd>Ctrl</kbd> + <kbd>F</kbd> 가 동작하지 않습니다. 긴 메모에서 찾아야 하면 문서 모양 버튼을 눌러 편집으로 돌아간 뒤 찾으세요. 글자를 드래그해서 복사하는 것은 읽는 중에도 됩니다.</p>
+  </div>
+
+  <p style="margin-top:16px">꾸민 모습은 <b>보여 줄 때만 그때그때 만들어집니다.</b> 파일은 끝까지 적은 그대로의 텍스트이고, 따로 저장되는 것은 "이 메모는 조회 전용"이라는 표시뿐입니다.</p>
+</section>
+
+<section>
+  <span class="sec-label">단축키</span>
+  <h2>키보드로 쓰기</h2>
+  <p>맨 위 하나만 다른 프로그램을 쓰는 중에도 어디서나 동작합니다. 나머지는 메모창이 떠 있을 때만 동작합니다.</p>
+
+  <div class="keymap">
+    <div><span class="what">창 부르기 / 숨기기</span><span class="keys"><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>M</kbd></span><span class="scope">어디서나</span></div>
+    <div><span class="what">새 메모 쓰기</span><span class="keys"><kbd>Ctrl</kbd> + <kbd>N</kbd></span><span class="scope">메모창</span></div>
+    <div><span class="what">목록에서 위 메모로</span><span class="keys"><kbd>Ctrl</kbd> + <kbd>PageUp</kbd></span><span class="scope">메모창</span></div>
+    <div><span class="what">목록에서 아래 메모로</span><span class="keys"><kbd>Ctrl</kbd> + <kbd>PageDown</kbd></span><span class="scope">메모창</span></div>
+    <div><span class="what">굵게 씌우기 / 벗기기</span><span class="keys"><kbd>Ctrl</kbd> + <kbd>B</kbd></span><span class="scope">메모창</span></div>
+    <div><span class="what">들여쓰기 / 내어쓰기</span><span class="keys"><kbd>Tab</kbd> · <kbd>Shift</kbd> + <kbd>Tab</kbd></span><span class="scope">메모창</span></div>
+    <div><span class="what">실행 취소 / 다시 실행</span><span class="keys"><kbd>Ctrl</kbd> + <kbd>Z</kbd> · <kbd>Ctrl</kbd> + <kbd>Y</kbd></span><span class="scope">메모창</span></div>
+  </div>
+
+  <div class="callout">
+    <span class="h">메모 넘기기는 목록에 보이는 순서를 따릅니다</span>
+    <p><kbd>Ctrl</kbd> + <kbd>PageUp</kbd> 은 <b>오른쪽 목록에서 한 칸 위</b>, <kbd>Ctrl</kbd> + <kbd>PageDown</kbd> 은 <b>한 칸 아래</b>로 갑니다. 즐겨찾기가 맨 위에 모여 있으므로 위로 계속 올라가면 즐겨찾기로 들어갑니다. 목록에서 <b>검색어를 쳐 둔 상태라면 걸러진 메모들 사이에서만</b> 오갑니다.</p>
+  </div>
+
+  <p style="margin-top:16px"><kbd>Tab</kbd> 은 글 쓰는 곳에서 <b>공백 네 칸</b>을 넣습니다. 여러 줄을 고른 채로 누르면 고른 줄이 통째로 밀려납니다. <kbd>Shift</kbd> + <kbd>Tab</kbd> 은 반대로 당겨 옵니다.</p>
+
+  <h3>Esc 는 한 겹씩 닫습니다</h3>
+  <p>상황에 따라 다르게 동작합니다. 눌렀을 때 창이 바로 사라지지 않는다면 아직 닫을 것이 남아 있다는 뜻입니다.</p>
+  <pre>우클릭 메뉴 → 검색어 → 편집기로 돌아가기 → 창 숨기기</pre>
+
+  <p style="margin-top:16px">이 조합이 다른 프로그램과 겹치거나 손에 안 맞으면 바꿀 수 있습니다. 트레이 아이콘을 <b>우클릭 → 단축키 설정</b> 에서 칸을 클릭하고 원하는 키를 그대로 누르면 됩니다.</p>
+</section>
+
+<section>
+  <span class="sec-label">찾기</span>
+  <h2>메모 목록</h2>
+  <p>목록은 <b>창 오른쪽에 늘 붙어 있습니다.</b> 접거나 펼칠 일 없이 언제나 거기 있고, 글 쓰는 자리는 목록과 별개로 잡혀 있어 좁아지지 않습니다.</p>
+
+  <div class="keymap" style="margin-top:14px">
+    <div><span class="what">제목과 내용에서 찾기</span><span class="keys">위쪽 칸에 타이핑</span><span class="scope"></span></div>
+    <div><span class="what">메모 열기</span><span class="keys">한 번 클릭</span><span class="scope"></span></div>
+    <div><span class="what">목록 훑어보기</span><span class="keys"><kbd>↑</kbd> <kbd>↓</kbd></span><span class="scope"></span></div>
+    <div><span class="what">메모 지우기</span><span class="keys"><kbd>Delete</kbd> 또는 <b>×</b> 버튼</span><span class="scope"></span></div>
+    <div><span class="what">검색어 지우기 · 편집기로 돌아가기</span><span class="keys"><kbd>Esc</kbd></span><span class="scope"></span></div>
+  </div>
+
+  <p style="margin-top:16px">검색은 제목뿐 아니라 <b>본문 전체</b>를 훑습니다. 제목이 기억나지 않아도 안에 썼던 단어로 찾을 수 있습니다. 지금 보고 있는 메모는 <b>청록색 굵은 글씨</b>로 표시됩니다.</p>
+
+  <div class="callout">
+    <span class="h">클릭해도 커서는 목록에 남습니다</span>
+    <p>메모를 클릭하면 왼쪽에 내용이 열리지만 <b>커서는 목록에 머뭅니다.</b> 그래서 클릭으로 내용을 확인하고 곧바로 <kbd>Delete</kbd> 를 눌러 지울 수 있습니다. 글을 고치려면 왼쪽 글 쓰는 곳을 한 번 클릭하세요.</p>
+  </div>
+
+  <div class="callout">
+    <span class="h">한 번에 하나만 열립니다</span>
+    <p>목록에서 다른 메모를 고르면 보던 메모가 저장된 뒤 그 자리에 새 메모가 들어옵니다. 창이 여러 개로 늘어나지 않습니다.</p>
+  </div>
+</section>
+
+<section>
+  <span class="sec-label">자주 쓰는 메모</span>
+  <h2>즐겨찾기와 전용 단축키</h2>
+
+  <div class="card">
+    <h3>즐겨찾기 — 목록 맨 위에 두기</h3>
+    <p>목록에서 메모 왼쪽의 <b>별</b>을 누르면 그 메모가 맨 위 즐겨찾기 칸으로 올라갑니다. 별은 마우스를 올리면 나타납니다.</p>
+    <p>즐겨찾기는 <b>별을 누른 순서대로 자리가 굳습니다.</b> 내용을 고쳐도 위치가 바뀌지 않아서, 자주 보는 메모는 언제 열어도 늘 같은 자리에 있습니다. 별을 다시 누르면 풀립니다.</p>
+  </div>
+
+  <div class="card">
+    <h3>전용 단축키 — 특정 메모를 한 번에 열기</h3>
+    <p>매일 여는 메모가 있다면 그 메모에만 키를 걸어 둘 수 있습니다. 목록에서 메모를 <b>우클릭 → 단축키 지정</b> 을 고르고 원하는 조합을 누르면 됩니다.</p>
+    <p>그 뒤로는 어떤 프로그램을 쓰고 있든 그 키를 누르면 곧바로 그 메모가 열립니다. 개수 제한은 없습니다. 지정된 메모는 목록에 키가 함께 표시됩니다.</p>
+  </div>
+
+  <div class="callout warn">
+    <span class="h">겹치는 키는 등록되지 않습니다</span>
+    <p>이미 쓰고 있는 조합이거나 다른 프로그램이 차지한 조합이면, 등록하지 않고 어디에 쓰이는지 알려 줍니다. 원래 설정은 그대로 유지되니 마음 놓고 시도해 보셔도 됩니다.</p>
+  </div>
+</section>
+
+<section>
+  <span class="sec-label">보관</span>
+  <h2>메모는 어디에 저장되나</h2>
+  <p>메모 하나가 텍스트 파일 하나입니다. 아래 폴더에 쌓입니다.</p>
+  <pre>%APPDATA%\빠른메모\notes\</pre>
+  <p style="margin-top:14px">아래쪽 <b>폴더 버튼</b>을 누르면 이 폴더가 바로 열립니다. 탐색기 주소창에 <code>%APPDATA%\빠른메모</code> 를 붙여 넣어도 됩니다. 파일 이름은 메모를 처음 만든 시각이고, 내용은 그냥 텍스트라 다른 편집기로 열어도 그대로 보입니다.</p>
+
+  <div class="callout">
+    <span class="h">AI에게 메모를 보여 줄 때</span>
+    <p>폴더 버튼으로 폴더를 열고 파일을 고른 뒤 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd> 를 누르면 경로가 복사됩니다. 그대로 붙여 넣으면 AI가 그 파일을 읽고 답할 수 있습니다.</p>
+    <pre>C:\Users\사용자\AppData\Roaming\빠른메모\notes\20260917-143012.txt</pre>
+    <p style="margin-top:10px">아직 한 글자도 안 쓴 새 메모는 파일이 없어서 복사할 경로도 없습니다. 내용을 적으면 그 순간 파일이 생깁니다.</p>
+  </div>
+
+  <div class="callout">
+    <span class="h">백업은 폴더 복사면 끝</span>
+    <p><code>빠른메모</code> 폴더를 통째로 복사해 두면 그게 백업입니다. 다른 PC에서 쓰려면 같은 위치에 붙여 넣으면 그대로 이어집니다. 즐겨찾기와 단축키 설정은 같은 폴더의 <code>settings.json</code> 에 들어 있습니다.</p>
+  </div>
+</section>
+
+<section>
+  <span class="sec-label">궁금한 것</span>
+  <h2>이럴 땐 이렇게</h2>
+  <div class="qa">
+    <details>
+      <summary>완전히 종료하려면?</summary>
+      <div class="body">
+        <p>트레이 아이콘을 <b>우클릭 → 종료</b>. 창의 <kbd>X</kbd> 는 숨기기일 뿐이라 종료되지 않습니다.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>재부팅하면 저절로 켜지나요?</summary>
+      <div class="body">
+        <p>네. 로그인하면 저절로 올라옵니다. 다만 <b>창은 뜨지 않고 트레이 아이콘만</b> 생깁니다. 로그인하자마자 메모 창이 하려던 일 앞을 가리지 않도록 그렇게 해 두었습니다.</p>
+        <p>쓰실 때는 평소처럼 <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>M</kbd> 을 누르거나 트레이 아이콘을 클릭하세요. 마지막에 보던 메모가 그대로 열립니다.</p>
+        <p>자동 실행을 끄고 싶으면 <kbd>Win</kbd> + <kbd>R</kbd> 에 <code>shell:startup</code> 을 넣어 열리는 폴더에서 <code>빠른메모.lnk</code> 를 지우세요. 다만 새 버전을 배포하면 다시 등록됩니다.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>단축키를 눌러도 아무 반응이 없어요</summary>
+      <div class="body">
+        <p>먼저 프로그램이 켜져 있는지 확인해 주세요. 트레이에 아이콘이 없으면 꺼진 상태입니다.</p>
+        <p>켜져 있는데도 안 되면 다른 프로그램이 같은 조합을 차지한 경우입니다. 켤 때 안내 창이 떴을 겁니다. 트레이 <b>우클릭 → 단축키 설정</b> 에서 다른 조합으로 바꿔 주세요.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>실수로 지운 메모를 되살리려면?</summary>
+      <div class="body">
+        <p>삭제한 메모는 <b>윈도우 휴지통</b>으로 들어갑니다. 휴지통에서 복원하면 창을 다시 불러올 때 목록에 나타납니다.</p>
+        <p>다만 즐겨찾기나 걸어 둔 단축키는 함께 돌아오지 않으니 다시 지정하셔야 합니다.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>쓰던 내용이 저장 안 됐을까 걱정될 때</summary>
+      <div class="body">
+        <p>창 아래쪽 오른편을 보세요. <code>저장됨 오후 2:30:52</code> 처럼 마지막으로 저장된 시각이 표시됩니다.</p>
+        <p>타이핑 중에는 잠시 사라졌다가, 손을 떼면 다시 시각이 찍힙니다. 다른 창을 한 번 클릭했다 돌아오면 그 순간에도 저장됩니다.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>창이 어디 갔는지 모르겠어요</summary>
+      <div class="body">
+        <p><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>M</kbd> 을 누르면 창이 화면 앞으로 나옵니다. 트레이 아이콘을 클릭해도 됩니다.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>메모가 폴더에 안 보여요</summary>
+      <div class="body">
+        <p>탐색기 창이 오래 열려 있었다면 <kbd>F5</kbd> 로 새로 고쳐 보세요.</p>
+        <p>그래도 안 보이면 프로그램을 <b>탐색기에서 직접</b> 실행했는지 확인해 주세요. 다른 프로그램 안에서 실행하면 메모가 다른 폴더에 저장되는 경우가 있습니다.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>--- 를 그었는데 윗줄이 제목처럼 커져요</summary>
+      <div class="body">
+        <p>지금 버전에서는 고쳐졌습니다. 예전에는 마크다운 규칙 때문에 <code>---</code> 바로 윗줄이 제목으로 해석됐습니다.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <p>빠른 메모 · 윈도우 11 · 트레이 우클릭 → 사용법에서 다시 열 수 있습니다</p>
+</footer>
+
+</div>

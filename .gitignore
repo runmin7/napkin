@@ -1,0 +1,9 @@
+node_modules/
+dist/
+
+# esbuild 산출물. 소스에서 npm run bundle로 다시 만든다.
+# editor.js.map 하나가 2MB를 넘어 소스보다 크고, 커밋마다 통째로 달라진다.
+renderer/bundle/
+
+# Claude Code의 개인 권한 설정. 사람마다 다르다.
+.claude/settings.local.json

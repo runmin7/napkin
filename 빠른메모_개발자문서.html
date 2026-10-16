@@ -1,0 +1,1069 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>빠른 메모 개발자 문서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+	:root {
+		--ground:      #FCFCFD;
+		--surface:     #F2F4F7;
+		--surface-2:   #E7EAF0;
+		--ink:         #14171D;
+		--ink-mid:     #4C5462;
+		--ink-dim:     #6E7686;
+		--rule:        #D9DDE5;
+		--rule-soft:   #E8EBF1;
+		--accent:      #0F6B68;
+		--accent-soft: #DCEEED;
+		--bad:         #C0392B;
+		--bad-soft:    #FBE9E7;
+		--good:        #1B7A4E;
+		--good-soft:   #E4F3EA;
+		--code-bg:     #F6F7FA;
+
+		--f-sans: 'IBM Plex Sans KR', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+		--f-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+		color-scheme: light;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root:not([data-theme="light"]) {
+			--ground:      #0F1116;
+			--surface:     #171A21;
+			--surface-2:   #1F232C;
+			--ink:         #E8EAF0;
+			--ink-mid:     #AFB6C4;
+			--ink-dim:     #8A92A2;
+			--rule:        #2A2F3A;
+			--rule-soft:   #22262F;
+			--accent:      #5EC8C2;
+			--accent-soft: #16302F;
+			--bad:         #EF8579;
+			--bad-soft:    #2E1C19;
+			--good:        #5FC48C;
+			--good-soft:   #16291F;
+			--code-bg:     #14171D;
+
+			color-scheme: dark;
+		}
+	}
+
+	:root[data-theme="dark"] {
+		--ground:      #0F1116;
+		--surface:     #171A21;
+		--surface-2:   #1F232C;
+		--ink:         #E8EAF0;
+		--ink-mid:     #AFB6C4;
+		--ink-dim:     #8A92A2;
+		--rule:        #2A2F3A;
+		--rule-soft:   #22262F;
+		--accent:      #5EC8C2;
+		--accent-soft: #16302F;
+		--bad:         #EF8579;
+		--bad-soft:    #2E1C19;
+		--good:        #5FC48C;
+		--good-soft:   #16291F;
+		--code-bg:     #14171D;
+
+		color-scheme: dark;
+	}
+
+	* { box-sizing: border-box; }
+
+	body {
+		margin: 0;
+		background: var(--ground);
+		color: var(--ink);
+		font-family: var(--f-sans);
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 1.72;
+		-webkit-font-smoothing: antialiased;
+		word-break: keep-all;
+	}
+
+	.wrap {
+		max-width: 940px;
+		margin: 0 auto;
+		padding: 0 28px 120px;
+	}
+
+	/* 본문 텍스트는 좁게, 코드·표·그림은 wrap 전체 폭을 쓴다 */
+	p, ul, ol, .lede, .note { max-width: 66ch; }
+
+	a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+	a:focus-visible, summary:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 3px;
+		border-radius: 2px;
+	}
+
+	code, kbd, pre, .mono { font-family: var(--f-mono); font-feature-settings: 'zero' 1; }
+
+	:not(pre) > code {
+		font-size: 0.855em;
+		background: var(--surface);
+		border: 1px solid var(--rule-soft);
+		border-radius: 3px;
+		padding: 0.08em 0.34em;
+		word-break: break-all;
+	}
+
+	/* ---------- 헤더 ---------- */
+
+	header { padding: 76px 0 0; }
+
+	.eyebrow {
+		font-family: var(--f-mono);
+		font-size: 11.5px;
+		font-weight: 500;
+		letter-spacing: 0.13em;
+		text-transform: uppercase;
+		color: var(--ink-dim);
+		margin: 0 0 20px;
+	}
+
+	h1 {
+		font-size: clamp(32px, 5.4vw, 47px);
+		line-height: 1.16;
+		font-weight: 600;
+		letter-spacing: -0.021em;
+		text-wrap: balance;
+		margin: 0 0 22px;
+	}
+
+	.lede {
+		font-size: 19px;
+		line-height: 1.66;
+		color: var(--ink-mid);
+		font-weight: 300;
+		margin: 0 0 40px;
+	}
+	.lede strong { color: var(--ink); font-weight: 500; }
+
+	/* 실제 dim 오버레이 재현 — 증상을 첫 화면에서 보여준다 */
+	.dim-sample {
+		background: #000;
+		border-radius: 4px;
+		padding: 30px 26px;
+		text-align: center;
+		margin: 0 0 14px;
+	}
+	.dim-sample span {
+		display: block;
+		color: rgba(255, 255, 255, 0.5);
+		font-size: 16px;
+		line-height: 1.85;
+		font-weight: 400;
+	}
+	.dim-caption {
+		font-family: var(--f-mono);
+		font-size: 11.5px;
+		color: var(--ink-dim);
+		line-height: 1.7;
+		margin: 0 0 52px;
+		max-width: none;
+	}
+
+	.facts {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(184px, 1fr));
+		gap: 1px;
+		background: var(--rule);
+		border: 1px solid var(--rule);
+		border-radius: 4px;
+		overflow: hidden;
+		margin: 0 0 4px;
+	}
+	.fact { background: var(--ground); padding: 16px 18px 18px; }
+	.fact dt {
+		font-family: var(--f-mono);
+		font-size: 10.5px;
+		font-weight: 500;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-dim);
+		margin: 0 0 6px;
+	}
+	.fact dd {
+		margin: 0;
+		font-size: 14.5px;
+		line-height: 1.5;
+		color: var(--ink);
+		font-weight: 500;
+	}
+	.fact dd .sub { display: block; font-weight: 400; font-size: 13px; color: var(--ink-mid); }
+
+	/* ---------- 섹션 ---------- */
+
+	section { margin-top: 68px; }
+
+	.sec-label {
+		font-family: var(--f-mono);
+		font-size: 11px;
+		font-weight: 500;
+		letter-spacing: 0.13em;
+		text-transform: uppercase;
+		color: var(--accent);
+		padding-bottom: 10px;
+		border-bottom: 1px solid var(--rule);
+		margin: 0 0 26px;
+	}
+
+	h2 {
+		font-size: 26px;
+		line-height: 1.32;
+		font-weight: 600;
+		letter-spacing: -0.014em;
+		text-wrap: balance;
+		margin: 0 0 18px;
+	}
+
+	h3 {
+		font-size: 17.5px;
+		line-height: 1.45;
+		font-weight: 600;
+		margin: 40px 0 12px;
+	}
+
+	p { margin: 0 0 18px; }
+
+	ul, ol { margin: 0 0 18px; padding-left: 1.35em; }
+	li { margin-bottom: 9px; }
+	li::marker { color: var(--ink-dim); }
+
+	.note {
+		border-left: 2px solid var(--rule);
+		padding: 2px 0 2px 18px;
+		color: var(--ink-mid);
+		font-size: 15px;
+		margin: 0 0 18px;
+	}
+	.note strong { color: var(--ink); font-weight: 600; }
+
+	/* ---------- 코드 ---------- */
+
+	figure { margin: 26px 0; max-width: none; }
+
+	pre {
+		background: var(--code-bg);
+		border: 1px solid var(--rule-soft);
+		border-radius: 4px;
+		padding: 17px 19px;
+		margin: 0;
+		overflow-x: auto;
+		font-size: 13px;
+		line-height: 1.72;
+		tab-size: 4;
+	}
+	pre code { white-space: pre; }
+
+	.cm { color: var(--ink-dim); }
+	.hl-bad  { color: var(--bad);  font-weight: 600; }
+	.hl-good { color: var(--accent); font-weight: 600; }
+
+	figcaption {
+		font-size: 13.5px;
+		line-height: 1.62;
+		color: var(--ink-mid);
+		margin-top: 11px;
+		max-width: 72ch;
+	}
+	figcaption .tag {
+		font-family: var(--f-mono);
+		font-size: 10.5px;
+		font-weight: 600;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		padding: 2px 6px;
+		border-radius: 3px;
+		margin-right: 8px;
+		vertical-align: 1.5px;
+	}
+	.tag-before { background: var(--bad-soft);  color: var(--bad); }
+	.tag-after  { background: var(--good-soft); color: var(--good); }
+
+	/* ---------- 표 ---------- */
+
+	.tbl-scroll { overflow-x: auto; margin: 26px 0; }
+
+	table {
+		border-collapse: collapse;
+		width: 100%;
+		min-width: 620px;
+		font-size: 14px;
+	}
+	caption {
+		text-align: left;
+		font-size: 13.5px;
+		color: var(--ink-mid);
+		padding-bottom: 12px;
+	}
+	th, td {
+		text-align: left;
+		padding: 11px 14px;
+		border-bottom: 1px solid var(--rule-soft);
+		vertical-align: top;
+		line-height: 1.55;
+	}
+	thead th {
+		font-family: var(--f-mono);
+		font-size: 10.5px;
+		font-weight: 600;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		color: var(--ink-dim);
+		border-bottom: 1px solid var(--rule);
+		white-space: nowrap;
+	}
+	tbody th { font-weight: 500; font-family: var(--f-mono); font-size: 12.5px; white-space: nowrap; }
+	tbody tr:last-child th, tbody tr:last-child td { border-bottom: none; }
+	td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+	.pill {
+		display: inline-block;
+		font-family: var(--f-mono);
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.03em;
+		padding: 2px 8px;
+		border-radius: 10px;
+		white-space: nowrap;
+	}
+	.pill-bad  { background: var(--bad-soft);  color: var(--bad); }
+	.pill-warn { background: var(--surface-2); color: var(--ink-mid); }
+	.pill-good { background: var(--good-soft); color: var(--good); }
+
+	/* ---------- 다이어그램 ---------- */
+
+	.fig-frame {
+		background: var(--surface);
+		border: 1px solid var(--rule-soft);
+		border-radius: 4px;
+		padding: 24px 20px 18px;
+		overflow-x: auto;
+	}
+	.fig-frame svg { display: block; max-width: 100%; height: auto; margin: 0 auto; min-width: 660px; }
+
+	.d-box   { fill: var(--ground); stroke: var(--rule); stroke-width: 1.25; }
+	.d-box-k { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+	.d-box-b { fill: var(--bad-soft); stroke: var(--bad); stroke-width: 1.25; }
+	.d-box-g { fill: var(--good-soft); stroke: var(--good); stroke-width: 1.25; }
+	.d-t     { fill: var(--ink); font-family: var(--f-sans); font-size: 12.5px; }
+	.d-t-s   { fill: var(--ink-mid); font-family: var(--f-sans); font-size: 11.5px; }
+	.d-m     { fill: var(--ink-dim); font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.07em; }
+	.d-m-b   { fill: var(--bad); font-family: var(--f-mono); font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; }
+	.d-m-g   { fill: var(--good); font-family: var(--f-mono); font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; }
+	.d-line  { stroke: var(--ink-dim); stroke-width: 1.25; fill: none; }
+	.d-line-b{ stroke: var(--bad); stroke-width: 1.25; fill: none; stroke-dasharray: 4 3; }
+	.d-line-g{ stroke: var(--good); stroke-width: 1.5; fill: none; }
+
+	/* ---------- 검증 체크리스트 ---------- */
+
+	.checks { list-style: none; padding: 0; margin: 22px 0 0; max-width: none; }
+	.checks li {
+		display: grid;
+		grid-template-columns: 26px 1fr;
+		gap: 0 14px;
+		padding: 14px 0;
+		border-bottom: 1px solid var(--rule-soft);
+		margin: 0;
+		align-items: baseline;
+	}
+	.checks li:last-child { border-bottom: none; }
+	.checks .ix {
+		font-family: var(--f-mono);
+		font-size: 11.5px;
+		font-weight: 600;
+		color: var(--ink-dim);
+		font-variant-numeric: tabular-nums;
+	}
+	.checks .what { font-size: 15px; font-weight: 500; }
+	.checks .how { font-size: 14px; color: var(--ink-mid); line-height: 1.6; }
+	.checks .key .what { color: var(--accent); }
+
+	/* ---------- 푸터 ---------- */
+
+	footer {
+		margin-top: 72px;
+		padding-top: 22px;
+		border-top: 1px solid var(--rule);
+		font-size: 13.5px;
+		color: var(--ink-dim);
+		line-height: 1.7;
+	}
+	footer p { max-width: 72ch; margin: 0 0 8px; }
+
+	@media (max-width: 620px) {
+		header { padding-top: 52px; }
+		.wrap { padding: 0 20px 80px; }
+		.lede { font-size: 17.5px; }
+		section { margin-top: 54px; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		* { animation: none !important; transition: none !important; }
+	}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+	<p class="eyebrow">인수 문서 · 빠른 메모 · 2026-09-16</p>
+	<h1>빠른 메모 개발자 문서</h1>
+	<p class="lede">
+		윈도우 트레이에 상주하는 메모 앱이다. <strong>저장 버튼이 없고, 편집 창은 항상 하나뿐이다.</strong>
+		이 문서 하나로 코드를 고칠 수 있게 쓴다. 읽는 사람이 Electron을 처음 본다고 가정한다.
+	</p>
+
+	<dl class="facts">
+		<div class="fact">
+			<dt>런타임</dt>
+			<dd>Electron 44.2.0<span class="sub">Chromium + Node.js</span></dd>
+		</div>
+		<div class="fact">
+			<dt>편집기</dt>
+			<dd>CodeMirror 6<span class="sub">마크다운 강조</span></dd>
+		</div>
+		<div class="fact">
+			<dt>번들러</dt>
+			<dd>esbuild 0.28<span class="sub">화면 스크립트 전체를 번들</span></dd>
+		</div>
+		<div class="fact">
+			<dt>패키징</dt>
+			<dd>electron-builder 26<span class="sub">portable exe</span></dd>
+		</div>
+		<div class="fact">
+			<dt>코드 규모</dt>
+			<dd>약 4,350줄<span class="sub">가장 큰 파일이 session.js 541줄</span></dd>
+		</div>
+		<div class="fact">
+			<dt>런타임 의존성</dt>
+			<dd>marked 하나<span class="sub">마크다운 → HTML 변환. 나머지는 전부 devDependencies</span></dd>
+		</div>
+	</dl>
+</header>
+
+<section>
+	<p class="sec-label">01 — 전제 지식</p>
+	<h2>Electron이 두 개의 세계라는 것</h2>
+
+	<p>
+		Electron 앱은 성격이 다른 두 프로세스로 나뉜다. 이 구분을 모르면 코드가 왜 이렇게 쪼개져 있는지 이해할 수 없다.
+	</p>
+
+	<div class="tbl-scroll">
+		<table>
+			<caption>두 프로세스의 역할</caption>
+			<thead>
+				<tr><th>구분</th><th>실행 주체</th><th>할 수 있는 일</th><th>이 앱의 파일</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>메인</th>
+					<td>Node.js</td>
+					<td>파일 읽기·쓰기, 창 만들기, 트레이, 전역 단축키</td>
+					<td><code>main.js</code> + <code>src/main/*</code></td>
+				</tr>
+				<tr>
+					<th>렌더러</th>
+					<td>Chromium</td>
+					<td>화면 그리기, 사용자 입력 받기. <strong>파일 접근 불가</strong></td>
+					<td><code>src/renderer/*</code> → <code>renderer/bundle/*</code></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<p>
+		렌더러는 웹페이지와 같다. 보안상 파일 시스템에 손댈 수 없다. 그래서 화면에서 무언가를 저장하려면
+		메인에게 <strong>부탁</strong>해야 하는데, 이 부탁을 전달하는 통로가 IPC이고 그 통로의 문을
+		<code>preload.js</code>가 정의한다.
+	</p>
+
+	<figure>
+		<div class="fig-frame">
+			<svg viewBox="0 0 660 190" xmlns="http://www.w3.org/2000/svg">
+				<rect class="d-box-k" x="10" y="20" width="180" height="70" rx="4"/>
+				<text class="d-t" x="100" y="48" text-anchor="middle">렌더러 (Chromium)</text>
+				<text class="d-m" x="100" y="70" text-anchor="middle">bundle/editor.js</text>
+
+				<rect class="d-box" x="240" y="20" width="180" height="70" rx="4"/>
+				<text class="d-t" x="330" y="48" text-anchor="middle">bundle/preload.js</text>
+				<text class="d-m" x="330" y="70" text-anchor="middle">통로 정의 (window.api)</text>
+
+				<rect class="d-box-g" x="470" y="20" width="180" height="70" rx="4"/>
+				<text class="d-t" x="560" y="48" text-anchor="middle">메인 (Node.js)</text>
+				<text class="d-m" x="560" y="70" text-anchor="middle">main.js + src/main/*</text>
+
+				<line class="d-line" x1="190" y1="55" x2="240" y2="55"/>
+				<line class="d-line" x1="420" y1="55" x2="470" y2="55"/>
+
+				<rect class="d-box" x="470" y="125" width="180" height="50" rx="4"/>
+				<text class="d-m" x="560" y="155" text-anchor="middle">%APPDATA%\빠른메모</text>
+				<line class="d-line-g" x1="560" y1="90" x2="560" y2="125"/>
+
+				<text class="d-m" x="215" y="112" text-anchor="middle">IPC</text>
+			</svg>
+		</div>
+		<figcaption>화면에서 파일까지 가는 유일한 경로. 렌더러는 <code>window.api</code>에 있는 함수만 부를 수 있고, 그 목록은 <code>preload.js</code>가 정한다.</figcaption>
+	</figure>
+
+	<h3>왜 메인이 편집 내용을 들고 있는가</h3>
+
+	<p>
+		이 앱에서 가장 중요한 설계 결정이다. 보통은 화면이 내용을 갖고 저장할 때 넘기지만, 여기서는
+		<strong>메인 프로세스가 편집 중인 내용의 원본을 소유한다.</strong> 렌더러는 글자가 바뀔 때마다 전체 내용을 메인에 보낸다.
+	</p>
+
+	<p class="note">
+		<strong>이유</strong> 창이 닫히는 순간에 저장하려면 렌더러에게 "지금 내용 줘"라고 묻고 답을 기다려야 하는데,
+		그 사이에 창이 파괴되면 답이 오지 않는다. 메인이 미리 들고 있으면 기다릴 것이 없다.
+	</p>
+</section>
+
+<section>
+	<p class="sec-label">02 — 구조</p>
+	<h2>파일별 역할</h2>
+
+	<p>
+		한 파일이 여러 일을 겸하지 않도록 나누어 두었다. <strong>고칠 곳을 찾는 순서는 늘 같다</strong> —
+		아래 표에서 책임을 읽고 그 파일만 연다. 파일을 열었는데 찾던 것이 없다면 나눈 기준이 잘못된 것이니
+		그 자리에서 파일을 옮기지 말고 어느 책임에 속하는지부터 다시 따져 본다.
+	</p>
+
+	<h3>메인 프로세스</h3>
+
+	<div class="tbl-scroll">
+		<table>
+			<caption>파일을 읽고 쓰고 창을 띄우는 쪽. <code>main.js</code>가 이 모두를 직접 하지 않는다</caption>
+			<thead>
+				<tr><th>파일</th><th>줄 수</th><th>책임</th></tr>
+			</thead>
+			<tbody>
+				<tr><th>main.js</th><td class="num">105</td><td>앱을 켜고 끄는 순서, 그리고 모듈끼리의 배선. <strong>여기서는 아무 일도 하지 않는다</strong></td></tr>
+				<tr><th>src/main/session.js</th><td class="num">541</td><td><strong>지금 편집 중인 메모.</strong> 자동 저장, 메모 열기, 훑기, 목록 갱신, 즐겨찾기, 삭제, 메모별 단축키</td></tr>
+				<tr><th>src/main/windows.js</th><td class="num">364</td><td>모든 창의 생성·표시·크기·위치. <strong>메모의 내용은 모른다</strong></td></tr>
+				<tr><th>src/main/note-store.js</th><td class="num">122</td><td>메모 파일 자체. id 검증·생성, 읽기·쓰기, 제목 뽑기, 내용 캐시</td></tr>
+				<tr><th>src/main/settings-store.js</th><td class="num">127</td><td>설정 읽기·쓰기, 손상 시 백업 복구, 없는 메모를 가리키는 설정 정리</td></tr>
+				<tr><th>src/main/ipc.js</th><td class="num">91</td><td>화면에서 오는 요청의 배선만. <strong>어떤 요청이 오갈 수 있는지 이 파일 하나에 다 있다</strong></td></tr>
+				<tr><th>src/main/paths.js</th><td class="num">86</td><td>앱이 건드리는 모든 경로. 메모 폴더 나열과 임시 파일 청소도 여기</td></tr>
+				<tr><th>src/main/shortcuts.js</th><td class="num">90</td><td>전역 단축키 등록. 누르면 무슨 일이 일어나는지는 <code>main.js</code>가 꽂아 준다</td></tr>
+				<tr><th>src/main/save-failure.js</th><td class="num">59</td><td>저장이 안 되고 있다는 사실을 들고 있다가 알린다. 상태바 → 대화상자 → 이탈 막기</td></tr>
+				<tr><th>src/main/note-list.js</th><td class="num">57</td><td>목록 패널에 보낼 목록과 검색어. 즐겨찾기가 위, 나머지가 최신순</td></tr>
+				<tr><th>src/main/tray.js</th><td class="num">46</td><td>트레이 아이콘과 메뉴</td></tr>
+				<tr><th>src/main/markdown.js</th><td class="num">48</td><td>읽기용 HTML 변환. 결과는 저장하지 않고 편집 창의 <code>#reader</code>로 보낸다. <code>---</code>가 윗줄을 제목으로 만들지 않게 막는 처리가 여기</td></tr>
+				<tr><th>src/main/accelerators.js</th><td class="num">45</td><td>단축키 조합이 이미 쓰이고 있는지 가린다. <code>WINDOW_SHORTCUTS</code>가 여기 있다</td></tr>
+				<tr><th>src/main/atomic-write.js</th><td class="num">27</td><td>임시 파일에 먼저 쓰고 갈아 끼우는 쓰기. 설정과 메모가 같은 방식으로 지켜진다</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<p class="note">
+		<strong>의존은 한 방향으로만 흐른다</strong> 위 표의 아래쪽 파일이 위쪽을 부르지 않는다.
+		거꾸로 흘러야 하는 연결은 <code>main.js</code>의 <code>wireModules()</code> 안에 모아 두었다 —
+		창이 포커스를 잃을 때의 저장(<code>windows.setEditorHooks</code>)과 전역 단축키를 눌렀을 때의 동작(<code>shortcuts.setActions</code>) 두 가지뿐이다.
+		여기를 늘리기 시작하면 어느 파일이 어느 파일을 부르는지 다시 알 수 없게 된다.
+	</p>
+
+	<h3>화면</h3>
+
+	<div class="tbl-scroll">
+		<table>
+			<caption><code>src/renderer/</code>가 원본이고, 화면이 실제로 읽는 것은 번들이다</caption>
+			<thead>
+				<tr><th>파일</th><th>줄 수</th><th>책임</th></tr>
+			</thead>
+			<tbody>
+				<tr><th>src/editor-engine.js</th><td class="num">570</td><td><strong>CodeMirror를 아는 유일한 파일.</strong> 마크다운 강조 색, 편집기 테마, 표·목록에서의 Tab과 Enter, Ctrl+B</td></tr>
+				<tr><th>src/renderer/list.js</th><td class="num">309</td><td>오른쪽에 늘 붙어 있는 목록 패널. 검색·즐겨찾기·삭제·우클릭 메뉴</td></tr>
+				<tr><th>src/renderer/editor.js</th><td class="num">252</td><td>편집 창의 진입점. 상태줄 버튼, 창 안 단축키, Esc 처리. <strong>목록 패널을 만들어 쥐고 있는 쪽</strong></td></tr>
+				<tr><th>src/renderer/keycapture.js</th><td class="num">186</td><td>키 조합을 받아내는 작은 창. 목록과 설정이 공용</td></tr>
+				<tr><th>src/renderer/settings.js</th><td class="num">111</td><td>단축키 설정 창</td></tr>
+								<tr><th>src/md-table.js</th><td class="num">97</td><td>마크다운 표 문법 판정. CodeMirror를 모르는 순수 함수</td></tr>
+				<tr><th>src/md-list.js</th><td class="num">59</td><td>마크다운 목록 문법 판정. 위와 짝</td></tr>
+				<tr><th>renderer/css/*.css</th><td class="num">824</td><td>스타일 7개 파일. 편집 영역 <em>안쪽</em>만 editor-engine이 담당</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<p class="note">
+		<strong>CSS는 읽는 순서가 동작을 바꾼다</strong> <code>editor.css</code>의 <code>.side-list .title</code>과
+		<code>list.css</code>의 <code>.row .title</code>은 명시도가 같아서 <strong>나중에 읽힌 쪽이 이긴다</strong>.
+		<code>editor.html</code>의 <code>&lt;link&gt;</code> 순서(base → editor → common → list → capture)를 바꾸면
+		목록 제목의 줄바꿈이 달라진다.
+	</p>
+
+	<h3>양쪽이 함께 보는 것</h3>
+
+	<div class="tbl-scroll">
+		<table>
+			<caption>한쪽만 고치면 조용히 어긋나는 것들을 <code>shared/</code>에 모았다</caption>
+			<thead>
+				<tr><th>파일</th><th>줄 수</th><th>책임</th></tr>
+			</thead>
+			<tbody>
+				<tr><th>src/preload.js</th><td class="num">59</td><td>화면에 열어 줄 통로 목록. <strong>여기 없는 기능은 화면에서 쓸 수 없다.</strong> 번들을 거쳐 <code>renderer/bundle/preload.js</code>가 된다</td></tr>
+				<tr><th>shared/channels.js</th><td class="num">61</td><td>IPC 채널 이름. <code>ipc.js</code>는 그대로 읽고, preload는 번들에 넣어 읽는다</td></tr>
+				<tr><th>shared/shortcut-labels.js</th><td class="num">17</td><td>전역 단축키의 이름. 설정 창과 메인이 같은 이름을 부른다</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<p class="note">
+		<strong>왜 채널 이름을 상수로 두는가</strong> 채널 이름에 오타가 나면 예외도 로그도 없다.
+		그저 아무 일도 일어나지 않는다. 화면에서 버튼을 눌렀는데 반응이 없을 때 원인을 찾기가 유독 어려운 것이 이 때문이라,
+		양쪽이 같은 파일을 보게 해 두었다.
+	</p>
+
+	<h3>빌드 산출물</h3>
+
+	<p>
+		<code>src/</code> 아래 화면 코드는 그대로 로드되지 않는다. esbuild가 <strong>세 개</strong>의 진입점
+		(<code>editor</code> · <code>settings</code> · <code>preload</code>)을 각각 묶어
+		<code>renderer/bundle/</code>에 내놓고, HTML과 창 설정은 그 번들만 가리킨다.
+		<code>npm start</code>와 <code>npm run build</code> 앞에 번들 단계가 붙어 있다.
+	</p>
+
+	<div class="tbl-scroll">
+		<table>
+			<caption>진입점별로 다른 형식으로 묶인다</caption>
+			<thead><tr><th>진입점</th><th>형식</th><th>왜</th></tr></thead>
+			<tbody>
+				<tr><th>editor · settings</th><td><code>iife</code></td><td>화면이 일반 <code>&lt;script&gt;</code>로 읽는다. <code>file://</code>에서는 모듈 import가 막히기 때문</td></tr>
+				<tr><th>preload</th><td><code>cjs</code><span class="sub">--external:electron</span></td><td>sandbox 안에서 <code>require</code>할 수 있는 것은 <code>electron</code>뿐이다. 나머지는 전부 이 파일 안으로 들어가 있어야 한다</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<p class="note">
+		<strong>왜 <code>&lt;script type="module"&gt;</code>이 아닌가</strong> Chromium은 <code>file://</code>에서
+		모듈 import를 CORS로 막는다. Electron의 <code>loadFile()</code>은 <code>file://</code> URL을 쓰므로
+		브라우저처럼 모듈을 그대로 로드할 수 없다. 그래서 소스는 <code>import</code>/<code>export</code>로 쓰되
+		화면에는 번들로 내려 준다.
+	</p>
+
+	<p class="note">
+		<strong>주의</strong> <code>빠른메모 실행.bat</code>은 electron을 직접 띄우므로 번들을 만들지 않는다.
+		<code>src/</code> 아래를 고쳤다면 <code>npm run bundle</code>을 한 번 돌리거나 <code>npm start</code>로 실행해야 한다.
+	</p>
+</section>
+
+<section>
+	<p class="sec-label">03 — 데이터</p>
+	<h2>메모는 그냥 텍스트 파일이다</h2>
+
+	<figure>
+		<pre><code>%APPDATA%\빠른메모\
+├─ notes\
+│   └─ 20260916-172225.txt   <span class="cm">← 메모 1개 = 파일 1개. 파일명이 곧 id</span>
+├─ settings.json             <span class="cm">← 단축키, 즐겨찾기, 조회 전용, 마지막 메모, 창 위치</span>
+└─ settings.backup.json      <span class="cm">← 손상 대비 백업</span></code></pre>
+		<figcaption>데이터가 앱 바깥에 평범한 파일로 있다는 점이 이 설계의 핵심이다. 앱이 없어도 메모장으로 읽히고, 폴더를 복사하면 그게 백업이다.</figcaption>
+	</figure>
+
+	<div class="tbl-scroll">
+		<table>
+			<caption>데이터 규칙</caption>
+			<thead><tr><th>항목</th><th>규칙</th><th>정의 위치</th></tr></thead>
+			<tbody>
+				<tr><th>파일명</th><td><code>yyyyMMdd-HHmmss.txt</code>. 같은 초에 겹치면 <code>-1</code> 붙임</td><td><code>createNoteId()</code></td></tr>
+				<tr><th>id 검증</th><td>정규식으로 형식 확인. <strong>경로 조작 방어</strong></td><td><code>NOTE_ID_PATTERN</code></td></tr>
+				<tr><th>제목</th><td>비어 있지 않은 첫 줄, 80자까지</td><td><code>titleOf()</code></td></tr>
+				<tr><th>정렬</th><td>즐겨찾기(별 누른 순서)가 위, 나머지는 파일 수정 시각 최신순</td><td><code>buildList()</code> · <code>noteIdsInListOrder()</code></td></tr>
+				<tr><th>메모 넘기기 순서</th><td><strong>화면에 보이는 목록 순서를 렌더러에서 받아 쓴다.</strong> 검색으로 걸러진 목록이면 걸러진 것만 오간다</td><td><code>navigate()</code> ← <code>notePanel.visibleIds()</code></td></tr>
+				<tr><th>삭제</th><td>휴지통으로 이동 (<code>shell.trashItem</code>)</td><td>IPC <code>list:delete</code></td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<p class="note">
+		<strong>파일명이 곧 id</strong>라는 점이 중요하다. <code>settings.json</code>의 즐겨찾기·조회 전용 배열과 메모별 단축키 키가
+		전부 이 파일명을 담고 있다. 파일명 형식을 바꾸면 기존 설정이 전부 무효가 되므로 마이그레이션이 필요하다.
+	</p>
+</section>
+
+<section>
+	<p class="sec-label">04 — 사용한 API</p>
+	<h2>기본값이 결정하는 동작</h2>
+
+	<p>
+		코드에 안 적혀 있는 것이 더 위험하다. 아래 표의 <strong>미지정</strong> 행은 코드를 아무리 읽어도 알 수 없는,
+		Electron이 알아서 정한 동작이다. 값은 설치된 <code>electron.d.ts</code>(44.2.0)에서 직접 확인했다.
+	</p>
+
+	<h3>BrowserWindow · webPreferences</h3>
+
+	<div class="tbl-scroll">
+		<table>
+			<caption>편집 창 생성 옵션 · <code>src/main/windows.js</code> <code>createEditor()</code></caption>
+			<thead><tr><th>파라미터</th><th>지정 여부</th><th>현재 적용값</th><th>바꾸는 법 / 영향</th></tr></thead>
+			<tbody>
+				<tr><th>contextIsolation</th><td><span class="pill pill-good">지정</span></td><td><code>true</code></td><td>렌더러와 preload의 JS 컨텍스트 분리. 끄면 안 된다</td></tr>
+				<tr><th>nodeIntegration</th><td><span class="pill pill-good">지정</span></td><td><code>false</code></td><td>렌더러에서 <code>require</code> 차단</td></tr>
+				<tr><th>sandbox</th><td><span class="pill pill-bad">주의</span></td><td><code>true</code><span class="sub">Electron 20부터 기본</span></td><td><strong>preload는 <code>electron</code> 말고 아무것도 <code>require</code>할 수 없다.</strong> npm 모듈은 물론 <code>./shared/channels</code> 같은 <em>같은 프로젝트의 다른 파일</em>도 안 된다. 어기면 <code>module not found</code>로 preload 전체가 죽고 <code>window.api</code>가 통째로 사라진다 — 창은 멀쩡히 뜨는데 내용도 안 오고 입력도 안 먹고 버튼도 안 듣는다. 그래서 preload는 번들을 거친다(<code>npm run bundle:preload</code>)</td></tr>
+				<tr><th>webSecurity</th><td><span class="pill pill-warn">미지정</span></td><td><code>true</code></td><td>동일 출처 정책 적용. 로컬 파일 간 fetch가 막힌다</td></tr>
+				<tr><th>spellcheck</th><td><span class="pill pill-bad">미지정</span></td><td><code>true</code></td><td><strong>맞춤법 검사가 켜진다.</strong> 편집기는 <code>contentAttributes</code>로 따로 껐고, 문서 창은 <code>false</code>를 명시했다</td></tr>
+				<tr><th>backgroundThrottling</th><td><span class="pill pill-warn">미지정</span></td><td><code>true</code></td><td>창이 숨으면 렌더러 타이머가 느려진다. <strong>자동 저장은 메인에서 돌아 영향 없음</strong></td></tr>
+				<tr><th>show</th><td><span class="pill pill-warn">미지정</span></td><td><code>true</code></td><td>창이 만들어지자마자 보인다</td></tr>
+				<tr><th>autoHideMenuBar</th><td><span class="pill pill-good">지정</span></td><td><code>true</code></td><td>추가로 <code>setMenu(null)</code>까지 호출해 메뉴바를 완전히 없앰</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h3>그 밖의 API 계약</h3>
+
+	<div class="tbl-scroll">
+		<table>
+			<caption>실제로 확인한 반환값과 예외</caption>
+			<thead><tr><th>API</th><th>계약</th><th>이 앱의 처리</th></tr></thead>
+			<tbody>
+				<tr>
+					<th>globalShortcut<br>.register()</th>
+					<td>성공 여부를 <code>boolean</code>으로 반환. <strong>예외를 던지지 않고 조용히 실패</strong>할 수 있다</td>
+					<td>반환값을 반드시 확인한다. 실패 목록을 모아 <code>applyShortcuts()</code>가 알림</td>
+				</tr>
+				<tr>
+					<th>shell.trashItem()</th>
+					<td><code>Promise&lt;void&gt;</code>. 실패 시 reject</td>
+					<td><code>try/catch</code>로 감싸 실패를 사용자에게 알림</td>
+				</tr>
+				<tr>
+					<th>app.getPath('appData')</th>
+					<td>Windows에서 <code>%APPDATA%</code> (Roaming)</td>
+					<td>여기에 <code>빠른메모</code>를 붙여 데이터 폴더로 씀</td>
+				</tr>
+				<tr>
+					<th>fs.writeFileSync()</th>
+					<td>flag 미지정 시 <code>'w'</code> — 있으면 덮어쓰고 없으면 생성. <strong>원자적이지 않다</strong></td>
+					<td>설정 저장은 임시 파일 + <code>renameSync</code>로 원자성 확보 (05장 참조)</td>
+				</tr>
+				<tr>
+					<th>electron-builder<br><code>asar</code></th>
+					<td><span class="pill pill-warn">미지정</span> → <code>true</code>. 빌드 결과 <code>resources/app.asar</code> 생성으로 실증</td>
+					<td>문서 HTML이 asar 안으로 들어가므로 외부 프로그램은 못 연다. 앱이 직접 창을 띄우는 이유</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<section>
+	<p class="sec-label">05 — 코드 해설</p>
+	<h2>지우면 깨지는 것들</h2>
+
+	<h3>자동 저장 — 저장 시점이 11곳이다</h3>
+
+	<figure>
+		<pre><code>let draft = { id: null, content: '', savedContent: null };
+
+function flushDraft() {
+  if (draft.id === null) {
+    <span class="cm">// 빈 메모는 파일을 만들지 않는다</span>
+    if (draft.content.trim() === '') return null;
+    draft.id = createNoteId();
+    draft.savedContent = null;
+  }
+  <span class="hl-good">if (draft.savedContent === draft.content) return draft.id;</span>
+  fs.writeFileSync(notePath(draft.id), draft.content, 'utf8');
+  draft.savedContent = draft.content;
+}</code></pre>
+		<figcaption>
+			강조한 줄이 없으면 <strong>메모를 열어보기만 해도 파일이 다시 쓰인다.</strong> 그러면 수정 시각이 밀려
+			목록 순서가 계속 뒤바뀐다. 저장 호출 지점이 11곳(입력 후 600ms, 창 blur, 닫기, 숨기기, Esc,
+			메모 전환, 목록 열기, 설정 열기, 앱 종료 등)이라 증상이 자주 나온다.
+		</figcaption>
+	</figure>
+
+	<h3>설정 저장 — 원자적으로 쓴다</h3>
+
+	<figure>
+		<pre><code>fs.writeFileSync(SETTINGS_PATH, JSON.stringify(settings), 'utf8');</code></pre>
+		<figcaption><span class="tag tag-before">BEFORE</span>쓰는 도중 전원이 끊기면 파일이 잘린다. 다음 실행에서 JSON 파싱이 실패해 <strong>즐겨찾기와 단축키가 전부 초기화된다.</strong> 실제로 재부팅 후 이 증상이 발생했다.</figcaption>
+	</figure>
+
+	<figure>
+		<pre><code>const temp = `${SETTINGS_PATH}.tmp`;
+fs.writeFileSync(temp, JSON.stringify(settings, null, 2), 'utf8');
+<span class="hl-good">fs.renameSync(temp, SETTINGS_PATH);</span></code></pre>
+		<figcaption><span class="tag tag-after">AFTER</span>임시 파일에 다 쓴 뒤 통째로 갈아 끼운다. <code>rename</code>은 같은 볼륨에서 원자적이라 중간 상태가 없다. 여기에 백업 복구와 최근 메모 폴백까지 더해 3중으로 막았다.</figcaption>
+	</figure>
+
+	<h3>목록 패널 — 창 너비를 함께 조절한다</h3>
+
+	<p>
+		목록은 늘 붙어 있으므로 창을 만들 때 <code>PANEL_WIDTH</code>(340px)를 더한다. 편집 영역을 뺏지 않기 위해서다.
+		여기서 놓치기 쉬운 것이 <strong>창 위치를 기억할 때 패널 너비를 빼야 한다</strong>는 점이다.
+	</p>
+
+	<figure>
+		<pre><code>settings.windowBounds = {
+  width: <span class="hl-good">Math.max(live.width - PANEL_WIDTH, MIN_EDITOR_WIDTH)</span>,
+  ...
+};</code></pre>
+		<figcaption>목록은 늘 붙어 있으므로 저장은 패널을 뺀 값으로, 열 때는 다시 더해서 연다. 이 처리가 없으면 끌 때마다 다음 실행에서 창이 340px씩 계속 커진다.</figcaption>
+	</figure>
+
+	<p class="note">
+		<strong>이중 정의 주의</strong> <code>PANEL_WIDTH</code>는 <code>src/main/windows.js</code>와
+		<code>renderer/css/editor.css</code>의 <code>.side-list { width }</code> 양쪽에 있다.
+		한쪽만 바꾸면 편집 영역이 밀리거나 빈 틈이 생긴다.
+	</p>
+
+	<h3>마크다운 강조 — 글자는 건드리지 않는다</h3>
+
+	<figure>
+		<pre><code>markdown({ extensions: [{ <span class="hl-good">remove: ['SetextHeading']</span> }] })</code></pre>
+		<figcaption>
+			SetextHeading은 <strong>앞 줄에 텍스트가 있고 다음 줄이 <code>---</code>면 앞 줄을 제목으로 만드는</strong> 마크다운 표준 문법이다.
+			메모에서는 <code>---</code>를 구분선으로 쓰는 일이 훨씬 잦아 이 문법만 제거했다.
+			강조는 화면에만 입히므로 파일에는 <code>**굵게**</code>가 그대로 저장된다.
+		</figcaption>
+	</figure>
+</section>
+
+<section>
+	<p class="sec-label">06 — 설계</p>
+	<h2>택한 것과 택하지 않은 것</h2>
+
+	<div class="tbl-scroll">
+		<table>
+			<caption>주요 갈림길</caption>
+			<thead><tr><th>결정</th><th>택한 것</th><th>택하지 않은 것과 이유</th></tr></thead>
+			<tbody>
+				<tr>
+					<th>편집 내용<br>소유권</th>
+					<td>메인 프로세스가 원본 보유</td>
+					<td>렌더러 보유 → 창이 닫히는 순간의 저장을 놓칠 수 있다</td>
+				</tr>
+				<tr>
+					<th>저장 형식</th>
+					<td>평문 <code>.txt</code></td>
+					<td>HTML·독자 포맷 → 앱 없이 못 읽고, 편집기를 바꾸면 데이터까지 얽힌다</td>
+				</tr>
+				<tr>
+					<th>편집기</th>
+					<td>CodeMirror 6을 <strong>어댑터로 감쌈</strong></td>
+					<td>직접 사용 → 교체 비용이 커진다. 지금은 <code>editor-engine.js</code>만 다시 쓰면 <code>textarea</code>로도 되돌아갈 수 있다</td>
+				</tr>
+				<tr>
+					<th>목록</th>
+					<td>편집 창 안의 패널</td>
+					<td>별도 창 → 창이 늘어나 "한 번에 하나"라는 원칙과 어긋난다</td>
+				</tr>
+				<tr>
+					<th>문서 열기</th>
+					<td>앱이 직접 창을 띄움</td>
+					<td><code>shell.openPath</code> → 패키징하면 문서가 asar 안으로 들어가 외부 프로그램이 못 연다</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h3>CodeMirror 의존성에 대한 판단</h3>
+
+	<p>
+		CodeMirror는 유지 관리자가 사실상 한 명이다. 그럼에도 택한 이유는 <strong>교체 가능한 자리에 두었기 때문</strong>이다.
+		저장 형식도, 자동 저장도, 목록·검색도 전부 이 앱의 코드가 갖고 있다. 라이브러리가 멈춰도 잃는 것은 마크다운 강조뿐이고,
+		Electron 앱은 번들로 배포되므로 패키지가 사라져도 이미 빌드된 exe는 계속 동작한다.
+	</p>
+</section>
+
+<section>
+	<p class="sec-label">07 — 운영</p>
+	<h2>어디서 먼저 한계에 닿는가</h2>
+
+	<div class="tbl-scroll">
+		<table>
+			<caption>모두 <span class="pill pill-warn">미측정</span> — 코드 구조에서 읽어낸 추정이다</caption>
+			<thead><tr><th>지점</th><th>동작</th><th>한계 지점</th></tr></thead>
+			<tbody>
+				<tr>
+					<th>목록 열기</th>
+					<td><code>readAllNotes()</code>가 <strong>모든 메모의 본문 전체</strong>를 읽어 IPC로 보냄</td>
+					<td>메모가 수백 개를 넘거나 개별 메모가 커지면 패널을 열 때 눈에 띄게 느려진다</td>
+				</tr>
+				<tr>
+					<th>검색</th>
+					<td>렌더러가 이미 받은 배열을 필터링. 추가 I/O 없음</td>
+					<td>목록 데이터가 메모리에 올라온 뒤이므로 검색 자체는 가볍다</td>
+				</tr>
+				<tr>
+					<th>자동 저장</th>
+					<td>동기 쓰기(<code>writeFileSync</code>). 메모 하나 크기만큼</td>
+					<td><code>%APPDATA%</code>가 네트워크 드라이브로 리디렉션된 환경이면 타이핑 중 끊김이 생길 수 있다</td>
+				</tr>
+				<tr>
+					<th>메모리</th>
+					<td>Electron 기본 + 열린 메모 1개 + 목록 데이터</td>
+					<td>Chromium이 대부분을 차지한다. 메모 데이터는 무시할 수준</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h3>실패 모드</h3>
+
+	<ul>
+		<li><strong>설정 파일 손상</strong> — 백업에서 복구하고 즉시 정상 파일로 되돌린다. 백업도 못 읽으면 <code>.corrupt</code>로 남기고 사용자에게 알린다</li>
+		<li><strong>단축키 등록 실패</strong> — 다른 프로그램이 점유한 경우. 설정을 되돌리고 어느 기능의 단축키인지 이름을 붙여 알린다</li>
+		<li><strong>트레이 생성 실패</strong> — 창 닫기를 종료로 바꾼다. 되살릴 방법 없이 프로세스만 남는 상태를 피하기 위해서다</li>
+		<li><strong>탐색기에서 메모 삭제</strong> — 시작 시 <code>pruneMissing()</code>이 없는 파일을 가리키는 설정을 정리한다. 탐색 중 만나면 건너뛴다</li>
+	</ul>
+</section>
+
+<section>
+	<p class="sec-label">08 — 확인 절차</p>
+	<h2>고친 뒤 직접 돌려볼 것</h2>
+
+	<ol class="checks">
+		<li class="key">
+			<span class="ix">01</span>
+			<div>
+				<div class="what">부팅 점검</div>
+				<div class="how"><code>npm run smoke</code> — 번들을 새로 만든 뒤 앱을 실제로 띄워 <code>window.api</code>·편집기·메모 로드까지 확인하고 스스로 끝난다. 창은 뜨지 않는다. <strong>구조를 건드렸다면 이것부터 돌린다.</strong> preload나 번들이 깨지면 앱은 조용히 먹통이 되는데, 그 조용한 고장을 잡는 것이 이 점검이다</div>
+			</div>
+		</li>
+		<li>
+			<span class="ix">02</span>
+			<div>
+				<div class="what">문법 검사</div>
+				<div class="how"><code>node --check</code> 를 고친 파일마다. 메인 프로세스 전체는 <code>node -e "require('./src/main/ipc')"</code> 로는 안 되고(electron 모듈이 필요하다) <code>npm start</code>로 확인한다</div>
+			</div>
+		</li>
+		<li class="key">
+			<span class="ix">03</span>
+			<div>
+				<div class="what">앱은 사람이 직접 실행한다</div>
+				<div class="how"><code>빠른메모 실행.bat</code> 또는 <code>npm start</code>를 <strong>터미널에서 직접</strong>. 패키지 앱(MSIX) 컨테이너 안에서 실행하면 <code>%APPDATA%</code> 쓰기가 다른 폴더로 우회되어 메모가 엉뚱한 곳에 쌓인다 (09장 참조)</div>
+			</div>
+		</li>
+		<li>
+			<span class="ix">04</span>
+			<div>
+				<div class="what">저장이 실제로 되는지</div>
+				<div class="how">메모를 쓰고 다른 창을 한 번 클릭 → <code>%APPDATA%\빠른메모\notes</code>에 파일이 생기고 창 하단에 저장 시각이 찍히는지</div>
+			</div>
+		</li>
+		<li>
+			<span class="ix">05</span>
+			<div>
+				<div class="what">목록 순서가 튀지 않는지</div>
+				<div class="how"><code>Ctrl+PageUp/PageDown</code>으로 메모를 여러 번 오간다. <strong>내용을 고치지 않았는데 순서가 바뀌면</strong> <code>flushDraft()</code>의 내용 비교가 깨진 것이다</div>
+			</div>
+		</li>
+		<li>
+			<span class="ix">06</span>
+			<div>
+				<div class="what">패널 너비 누적 확인</div>
+				<div class="how">앱 종료 → 재실행 → 창이 커지지 않는지. <code>settings.json</code>의 <code>windowBounds.width</code>가 패널을 뺀 값이어야 한다</div>
+			</div>
+		</li>
+		<li>
+			<span class="ix">06b</span>
+			<div>
+				<div class="what">읽기 ↔ 편집 전환</div>
+				<div class="how">창 크기를 바꾼 채 문서 버튼으로 몇 번 오간 뒤 편집기가 제대로 그려지는지. 렌더링한 본문의 링크를 눌렀을 때 <strong>편집 창이 그 주소로 떠나지 않고</strong> 기본 브라우저가 뜨는지(<code>createEditor()</code>의 <code>will-navigate</code>)</div>
+			</div>
+		</li>
+		<li>
+			<span class="ix">07</span>
+			<div>
+				<div class="what">설정 손상 복구</div>
+				<div class="how"><code>settings.json</code>을 일부러 잘라 놓고 실행 → 콘솔에 복구 메시지가 뜨고 파일이 정상으로 되돌아오는지</div>
+			</div>
+		</li>
+		<li>
+			<span class="ix">08</span>
+			<div>
+				<div class="what">배포</div>
+				<div class="how"><code>빌드 후 배포.bat</code> 더블클릭. 종료 → 빌드 → 바탕화면 교체가 한 번에 진행된다</div>
+			</div>
+		</li>
+	</ol>
+</section>
+
+<section>
+	<p class="sec-label">09 — 유지보수 지도</p>
+	<h2>다음 사람에게</h2>
+
+	<h3>손대면 위험한 지점</h3>
+
+	<div class="tbl-scroll">
+		<table>
+			<thead><tr><th>위치</th><th>왜 위험한가</th></tr></thead>
+			<tbody>
+				<tr><th><code>flushDraft()</code>의<br>내용 비교<div class="sub"><code>src/main/session.js</code></div></th><td>이 한 줄이 목록 순서 안정성을 지탱한다. 저장 호출 지점이 11곳이라 문제가 자주 드러난다</td></tr>
+				<tr><th><code>NOTE_ID_PATTERN</code><div class="sub"><code>src/main/note-store.js</code></div></th><td>경로 조작 방어선이다. 느슨하게 만들면 화면에서 넘어온 값으로 임의 경로에 접근할 수 있다</td></tr>
+				<tr><th>파일명 형식</th><td><code>settings.json</code>의 즐겨찾기·조회 전용·단축키가 전부 파일명을 키로 쓴다. 형식을 바꾸면 마이그레이션이 필요하다</td></tr>
+				<tr><th><code>pruneMissing()</code><div class="sub"><code>src/main/settings-store.js</code></div></th><td>없는 파일을 가리키는 설정을 <strong>조용히 지운다</strong>. 파일 경로 규칙을 바꾸면서 이 함수를 그대로 두면 사용자 설정이 사라진다</td></tr>
+				<tr><th><code>listNoteFiles()</code>의<br>null 반환<div class="sub"><code>src/main/paths.js</code></div></th><td>메모 폴더를 <strong>읽지 못한 것</strong>과 <strong>메모가 없는 것</strong>을 가르는 값이다. 실패를 빈 배열로 바꾸면 <code>pruneMissing()</code>이 즐겨찾기와 메모별 단축키를 전부 지운다</td></tr>
+				<tr><th>preload의 <code>require</code><div class="sub"><code>src/preload.js</code></div></th><td>sandbox 때문에 <code>electron</code> 외에는 아무것도 부를 수 없다. 여기에 <code>require</code>를 하나 더 쓰면 <strong>앱이 통째로 먹통이 되는데 에러 창은 뜨지 않는다.</strong> 새 모듈이 필요하면 번들이 인라인할 수 있는 형태(순수 상수·순수 함수)여야 한다</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h3>바꾸고 싶어질 지점</h3>
+
+	<div class="tbl-scroll">
+		<table>
+			<thead><tr><th>바꾸려는 것</th><th>어디를</th></tr></thead>
+			<tbody>
+				<tr><th>마크다운 강조 색·크기</th><td><code>src/editor-engine.js</code>의 <code>markdownHighlight</code> 표 → <code>npm run bundle</code></td></tr>
+				<tr><th>표·취소선·체크박스 지원</th><td>같은 파일에서 <code>markdown()</code>에 GFM 확장 추가. <strong>부작용:</strong> <code>~~</code>가 문법이 되어 <code>1~~5번</code> 같은 표기가 취소선으로 잡힌다</td></tr>
+				<tr><th>패널 너비</th><td><code>PANEL_WIDTH</code>(<code>src/main/windows.js</code>) + <code>.side-list { width }</code>(<code>renderer/css/editor.css</code>) <strong>두 곳 모두</strong></td></tr>
+				<tr><th>자동 저장 간격</th><td><code>AUTOSAVE_DELAY</code> (<code>src/main/session.js</code>, 기본 600ms)</td></tr>
+				<tr><th>편집기 교체</th><td><code>src/editor-engine.js</code>만. 바깥은 <code>getText/setText/focus/contains</code> 네 개만 쓴다</td></tr>
+				<tr><th>기본 단축키</th><td><code>DEFAULT_SETTINGS.shortcuts</code>(<code>src/main/settings-store.js</code>). 기존 사용자는 <code>settings.json</code>이 우선하므로 영향 없음</td></tr>
+				<tr><th>창 안 단축키</th><td><code>src/renderer/editor.js</code> 맨 아래 <code>keydown</code> 처리 + <code>WINDOW_SHORTCUTS</code>(<code>src/main/accelerators.js</code>) <strong>두 곳 모두</strong>. 전역 단축키와 달리 설정에 저장되지 않는 고정값이다 (<code>Ctrl+N</code>·<code>Ctrl+PageUp/PageDown</code>)</td></tr>
+				<tr><th>Tab 들여쓰기 폭</th><td><code>src/editor-engine.js</code>의 <code>indentUnit.of('    ')</code> → <code>npm run bundle</code></td></tr>
+				<tr><th>예약 단축키</th><td><code>WINDOW_SHORTCUTS</code>(<code>src/main/accelerators.js</code>). 같은 파일의 <code>findAcceleratorOwner()</code>가 여기 있는 조합을 먼저 걸러 낸다. <strong>전역으로 등록되면 OS가 먼저 가로채 창 안에서는 아예 눌리지 않는다</strong></td></tr>
+				<tr><th>목록 패널 너비</th><td><code>src/main/windows.js</code>의 <code>PANEL_WIDTH</code>. 패널은 늘 붙어 있으므로 창 너비·최소 너비 계산에 항상 더해진다</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h3>알려진 한계</h3>
+
+	<ul>
+		<li>
+			<strong>패키지 앱 컨테이너 안에서 실행하면 데이터가 격리된다.</strong> MSIX로 설치된 앱(예: 개발 보조 도구)에서
+			이 앱을 실행하면 Windows가 <code>%APPDATA%</code> 쓰기를 <code>%LOCALAPPDATA%\Packages\&lt;패키지&gt;\LocalCache\Roaming</code>으로
+			돌린다. 컨테이너 안에서는 두 폴더가 겹쳐 보여 정상처럼 동작하지만, 밖에서는 그 메모가 보이지 않는다.
+			<strong>실제로 겪은 문제이고, 앱을 항상 탐색기에서 직접 실행하면 발생하지 않는다.</strong>
+		</li>
+		<li><strong>코드 서명이 없다.</strong> 인터넷·메일로 전달하면 SmartScreen 경고가 뜬다. USB나 사내 공유 폴더로 건네면 뜨지 않는다</li>
+		<li><strong>자동 업데이트가 없다.</strong> 새 exe를 각자 바꿔 끼워야 한다</li>
+		<li><strong>목록이 전체 본문을 읽는다.</strong> 메모가 많아지면 느려진다 (07장)</li>
+		<li>
+			<strong>자동 실행은 배포한 PC에만 등록된다.</strong> <code>deploy.ps1</code>의 4단계가 시작프로그램 폴더에
+			<code>--autostart</code> 인자를 단 바로가기를 만들고, <code>main.js</code>가 그 인자를 보면 창을 띄우지 않고
+			트레이에만 올라간다(<code>openInitialNote({ silent })</code>). exe만 복사해 간 PC에서는 각자 등록해야 한다.
+			portable 빌드라 <code>app.setLoginItemSettings()</code>는 쓰지 않았다. 그쪽이 레지스트리에 적는
+			<code>process.execPath</code>가 실행할 때마다 바뀌는 임시 폴더 경로이기 때문이다
+		</li>
+	</ul>
+
+	<h3>미해결 · 미확인</h3>
+
+	<ul>
+		<li><span class="pill pill-warn">미측정</span> 메모 개수에 따른 목록 열기 지연. 몇 개부터 체감되는지 확인하지 않았다</li>
+		<li><span class="pill pill-warn">미확인</span> 즐겨찾기 순서가 <code>settings.json</code> 배열 순서에 의존한다. 파일을 손으로 고쳐 순서를 바꾸는 것이 의도된 사용법인지 정하지 않았다</li>
+		<li><span class="pill pill-warn">미확인</span> 같은 초에 메모를 여러 개 만들 때 붙는 <code>-1</code> 접미사가 <code>NOTE_ID_PATTERN</code>과 맞는지는 코드상 일치하나 실제로 재현해 보지는 않았다</li>
+	</ul>
+</section>
+
+<footer>
+	<p>빠른 메모 · 인수 문서 · 2026-09-16 기준 · 트레이 아이콘 우클릭 → 개발자 문서에서 다시 열 수 있다</p>
+</footer>
+
+</div>
+
+</body>
+</html>

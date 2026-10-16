@@ -1,0 +1,191 @@
+/* 편집 창. 본문 편집기, 오른쪽 목록 패널의 자리, 아래 상태바.
+   목록 '항목'의 생김새는 list.css에 있다. 여기 있는 것은 패널이 놓이는 자리까지다.
+   규칙 순서에 기대는 곳이 있으므로 editor.css는 반드시 list.css보다 먼저 읽혀야 한다.
+   (.side-list .title 과 .row .title 은 명시도가 같아 나중에 읽힌 쪽이 이긴다.) */
+
+.editor-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* 편집 영역과 목록 패널이 나란히 놓인다. 패널은 늘 오른쪽에 붙어 있다. */
+.workspace {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.side-list {
+  flex: none;
+  /* main.js의 PANEL_WIDTH와 같은 값이어야 한다. */
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-left: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.side-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.side-head input[type='search'] {
+  flex: 1;
+  min-width: 0;
+  font-size: 12.5px;
+  padding: 5px 8px;
+}
+
+.side-body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.side-foot {
+  flex: none;
+  margin: 0;
+  padding: 6px 10px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 패널 안에서는 폭이 좁으므로 목록 항목을 조금 더 촘촘하게 둔다. */
+.side-list .row {
+  padding: 7px 10px;
+}
+
+/* 제목이 길면 두 줄까지 보여 준다. 한 줄로 자르면 어떤 메모인지 알아보기 어렵다. */
+.side-list .title {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.side-list .group-label {
+  padding: 8px 10px 3px;
+}
+
+/* 지금 편집 중인 메모 */
+.row.current .title {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* 안쪽은 편집기 엔진이 채운다. 글꼴·여백·색은 editor-engine.js의 테마에 있다. */
+#editor {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* 렌더링한 메모를 보여 주는 자리. #editor와 같은 칸을 차지하고 둘 중 하나만 보인다.
+   편집기는 CodeMirror가 안쪽에서 스크롤하므로 overflow:hidden이지만, 이쪽은 자신이 스크롤한다.
+   안쪽 .md-body가 760px로 좁혀져 가운데 놓이므로(css/preview.css), 칸을 받는 요소가 바깥에 따로 있어야 한다. */
+#reader {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  /* 메모가 들고 온 태그가 position:fixed로 목록이나 상태바를 덮지 못하게 이 칸 안에 가둔다. */
+  contain: layout;
+}
+
+/* 판 전체에 포커스 링이 둘리는 것을 막는다. 포커스를 받는 이유는 방향키로 훑기 위해서뿐이다. */
+#reader:focus {
+  outline: none;
+}
+
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  height: 26px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 11px;
+  color: var(--ink-faint);
+  user-select: none;
+}
+
+.statusbar .spacer {
+  flex: 1;
+}
+
+.icon-btn {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--ink-faint);
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: var(--hover);
+  color: var(--accent);
+}
+
+/* 켜져 있는 상태를 유지하는 버튼(항상 위 고정). 눌린 채로 남아 있음을 색으로 알린다. */
+.icon-btn.on {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* 상태바의 별. 항상 위 고정 버튼과 달리 배경은 칠하지 않고 색으로만 켜짐을 알린다.
+   목록 안의 별과 같은 결로 보여야 같은 기능임이 드러난다. */
+.statusbar .star {
+  font-size: 12px;
+}
+
+.statusbar .star.on,
+.statusbar .star.on:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+/* 저장 실패. 상태바에서 유일하게 눈에 띄어야 하는 문구다. */
+#saved.failed {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* 글자 수. 저장 시각과 붙어 보이지 않게 구분선을 하나 둔다. */
+.statusbar .count {
+  padding-right: 8px;
+  border-right: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+}
+
+.statusbar .count:empty {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.badge {
+  font-size: 10.5px;
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}

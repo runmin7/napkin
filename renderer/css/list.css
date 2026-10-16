@@ -1,0 +1,158 @@
+/* 메모 목록의 항목 하나하나와, 항목을 우클릭했을 때 뜨는 메뉴.
+   패널 자체의 자리와 크기는 editor.css에 있다. */
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 14px;
+  cursor: default;
+  border-left: 2px solid transparent;
+}
+
+.row:hover {
+  background: var(--hover);
+}
+
+.row.selected {
+  background: var(--select);
+  border-left-color: var(--accent);
+}
+
+.row .star {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.row:hover .star,
+.row .star.on {
+  opacity: 1;
+}
+
+.row .star.on {
+  color: var(--accent);
+}
+
+.row .star:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+.row .main {
+  flex: 1;
+  min-width: 0;
+}
+
+.row .title {
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.row .title.empty-title {
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.row .meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.row .meta .key {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0 4px;
+  color: var(--accent);
+}
+
+/* 조회 전용 표시. 단축키 뱃지와 같은 자리에 놓이지만 누를 키가 아니므로,
+   색을 주지 않고 테두리도 흐리게 두어 한눈에 갈린다. */
+.row .meta .tag {
+  border: 1px solid var(--line-soft);
+  border-radius: 3px;
+  padding: 0 4px;
+}
+
+/* 삭제 버튼. 별과 마찬가지로 마우스를 올렸을 때만 드러난다. */
+.row .remove {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 15px;
+  line-height: 16px;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.row:hover .remove {
+  opacity: 1;
+}
+
+.row .remove:hover {
+  background: transparent;
+  color: var(--danger);
+}
+
+/* ------------------------------------------------------------ 우클릭 메뉴 */
+
+.context-menu {
+  position: fixed;
+  z-index: 20;
+  min-width: 148px;
+  padding: 4px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.context-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  padding: 6px 10px;
+  font-size: 12.5px;
+}
+
+.context-menu button:hover {
+  background: var(--hover);
+}
+
+.context-menu button.danger:hover {
+  color: var(--danger);
+}
+
+.context-menu .sep {
+  height: 1px;
+  margin: 4px 2px;
+  background: var(--line-soft);
+}
+

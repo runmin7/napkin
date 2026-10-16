@@ -1,0 +1,57 @@
+{
+  "name": "quick-note",
+  "version": "1.0.0",
+  "description": "빠른 메모 - 트레이에 상주하는 자동저장 메모장",
+  "main": "main.js",
+  "scripts": {
+    "start": "npm run bundle && electron .",
+    "build": "npm run bundle && electron-builder --win portable",
+    "smoke": "npm run bundle && electron tools/smoke.js",
+    "bundle": "npm run bundle:renderer && npm run bundle:preload",
+    "bundle:renderer": "esbuild src/renderer/editor.js src/renderer/settings.js --bundle --format=iife --outdir=renderer/bundle --minify --sourcemap=linked --target=chrome120",
+    "bundle:preload": "esbuild src/preload.js --bundle --format=cjs --platform=node --external:electron --outfile=renderer/bundle/preload.js --minify --sourcemap=linked --target=chrome120"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/lang-markdown": "^6.5.2",
+    "@codemirror/language": "^6.12.4",
+    "@codemirror/search": "^6.7.2",
+    "@codemirror/state": "^6.7.5",
+    "@codemirror/view": "^6.43.12",
+    "@lezer/highlight": "^1.2.3",
+    "electron": "^44.2.0",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2"
+  },
+  "build": {
+    "appId": "com.minho.quicknote",
+    "productName": "빠른 메모",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "shared/**/*",
+      "src/main/**/*",
+      "renderer/**/*",
+      "assets/**/*",
+      "빠른메모_사용설명서.html",
+      "빠른메모_개발자문서.html",
+      "!renderer/bundle/*.map"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "assets/icon.png"
+    },
+    "portable": {
+      "artifactName": "빠른메모.exe"
+    },
+    "compression": "maximum"
+  },
+  "dependencies": {
+    "marked": "^18.0.13"
+  }
+}
